@@ -4,7 +4,7 @@
  <head>
   <meta charset=UTF-8>
   <meta content="width=device-width" name="viewport">
-  <title>%%Title%%</title>
+  <title>Lightweight Standards</title>
   <link rel="stylesheet" href="../Templates/slides.css">
   <!-- To use the b6+ framework, include this: -->
   <script src="../Templates/b6plus.js"></script>
@@ -17,7 +17,7 @@
      width: 5em; margin: 1em auto; text-align: center}
   </style>
  </head>
- <body class="shower fade-in duration=15 hidemouse">
+ <body class="shower fade-in duration=60 hidemouse">
 
   <section class=comment>
    <p>This is a template for slides for <a
@@ -64,7 +64,7 @@
   <div class=clock></div>
 
   <!-- Alternative: Show also real time and elapsed time. -->
-  <!-- <div class=fullclock></div> -->
+  <!--div class=fullclock></div-->
 
   <!-- What a screen reader should say on leaving slide mode,
        instead of the default ‘Stopped.’ -->
@@ -74,17 +74,111 @@
 
 
   <section class="slide cover clear" id="cover">
-   <h1>%%Title%%</h1>
-   <address>%%Author%%</address>
+   <h1>Lightweight Standards</h1>
+   <h2 style="font-size: 80%">by deriving reference implementations for many programming languages</h2>
+   <address>Mike Samuel<br><small>Chief Language Designer, Temper</small></address>
    <p class=event>TPAC 2025<br>
      Kobe, Japan &amp; online<br>
      10–14 November 2025</p>
   </section>
 
   <section class=comment>
-   <p>Notes for slide 1 can be put here.</p>
+   <p></p>
   </section>
 
+  <section class="slide" id="about-me">
+   <h2>Obligatory about me</h2>
+   <ul>
+    <li>1990s, CMU Field Robotics: Programming languages for robotic systems</li>
+    <li>17 years at Google: First frontender Google Calendar, eng <u>I18N</u> lead</li>
+    <li>Briefly on Calconnect standards, longtime <u>TC39</u> (JavaScript) member</li>
+    <li>Caja, object-capabilities PLs on web stack & early <u>websec</u> research</li>
+    <li>PL approaches to security engineering including <u>secure HTML</u> composition</li>
+    <li>Transferring sec-eng lessons to OSS stacks & dynlangs</li>
+    <li>Now: Language Designer, Temper</li>
+   </ul>
+  </section>
+
+  <section class=comment>
+   <p>Here's a bit about me.  If you're focused on I18N, the web
+   stack, security, I have enough practical experience so I feel like
+   we can have productive discussions.<p>
+
+   <p>My primary focus is programming languages, developer tools,
+   helping developers make better, more reliable systems. Especially
+   multi-language distributed systems.</p>
+
+   <p>My introduction to the web was Google Calendar. Google's second
+   or third big, JavaScript heavy web application. I wrote large
+   chunks of the first frontend. And I was calendar's first I18N
+   engineering lead during Google's internal 40-languages initiative.</p>
+
+   <p>I've done standards work before: Calconnect briefly, TC39.
+   Most recently, in W3 I edited an early version of the trusted types spec,
+   but I am not currently part of a member org.</p>
+
+   <p>And I've done a lot of work on security engineering. I am not
+   a cryptographer. I come at security from the programming languages
+   and developer tools perspective; for example, how can template languages
+   help developers produce XSS-free HTML.</p>
+  </section>
+
+  <section class="slide" id="signpost-1">
+   <br>
+   <p style="font-size: 120%">What is Temper</p>
+   <br>
+   <p style="font-size: 120%">Demo: making standards process easier</p>
+   <br>
+   <p style="font-size: 120%">What do you, standards' maintainers, need?</p>
+   <br>
+   <p style="font-size: 120%">Designing for Translation</p>
+   <br>
+   <p style="font-size: 120%">State of the project</p>
+  </section>
+
+  <section class=comment>
+   <p>I want this talk to be interactive. I'll set the stage with a demo.<p>
+
+   <p>Then I'd like you all to drive the discussion. We're working towards
+   a version 1.0 for the language, where compatibility-breaking changes become
+   hard. How can we deliver a language that is good for developers and good for
+   standards maintainers?</p>
+
+   <p>If you all are intersted in programming language design,
+   I have prepared some remarks on what makes Temper different.</p>
+
+   <p>Finally, I can give an overview of the state of the project.
+   You can use it today. But you'll be an early language adopter.
+   If this sounds useful to you, we, the Temper team, can mitigat
+   some early-language adopter pains or even pitch in on a pilot.<p>
+  </section>
+
+  <section class="slide" id="temper-nutshell">
+   <h2>Temper in a Nutshell</h2>
+   <p>A programming language
+   <ul>
+    <li>designed to translate well to all the others</li>
+    <li>for making libraries usable by every PL community</li>
+    <li>usable by everyday programmers</li>
+    <li>that enables lightweight standards efforts.</li>
+   </ul>
+  </section>
+
+  <section class=comment>
+   <p></p>
+  </section>
+
+  <section class="slide" id="demos-demos-demos">
+   <h2>Demos</h2>
+   <ul>
+    <li>Currency: ISO 4217 - A literate specification with types, logic, and tests.</li>
+    <li>CSS-color-4 - Can deriving libraries from specs help devs and the dev-tools ecosystem?</li>
+    <li>JSON {,un}parsing - Better interop via a partial reference implementation</li>
+  </section>
+
+  <section class=comment>
+   <p>I've got a few demos prepared. I'm going to start off with a simple one. ISO</p>
+  </section>
 
   <section class="slide" id="lists">
    <h2>Lists</h2>
