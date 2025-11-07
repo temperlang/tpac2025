@@ -407,7 +407,7 @@
 
   <section class="comment"></section>
 
-  <section class="slide" id="signpost-3">
+  <section class="slide" id="signpost-4">
    <p style="font-size: 110%">Why a translating language?</p>
    <br>
    <p style="font-size: 110%">Demos: making standards easier</p>
@@ -644,36 +644,168 @@ The in-process actor model allows mutually exclusive access to shared resources.
   <section class="slide" id="design-choice-strings">
    <h2>Strings</h2>
 
-   <pre><code></code></pre>
+   <p>What does <code>myString[i]</code> mean?</p>
 
-   <p></p>
+   <table width=100%>
+    <tr><td>Rust</td><td>index by UTF-8 code unit</td></tr>
+    <tr><td>C++ (usually), Lua,<br>Go, OCaml</td><td valign=top>index by octet, usually UTF-8</td></tr>
+    <tr><td>C#, Java, JS</td><td>index by UTF-16 code unit<td></tr>
+    <tr><td>Python3</td><td>index by codepoint</td></tr>
+    <tr><td>Ruby</td><td>yes! we do those things!</td></tr>
+    <tr><td>Swift, Temper</td><td>indices at CP edges by construction</td></tr>
+   </table>
   </section>
 
   <section class="comment">
+   <p>
+    Strings are a workhorse datatype.  They need to work consistently.
+    It's really hard to translate string processing code consistently
+    across languages.
+   </p>
+   <p>
+    What does myString brackets i mean?
+   </p>
+   <p>You can see in this table, languages fall into two main groups:
+    byte-based, the first two rows, and byte pair based
   </section>
 
-  <section class="slide" id="design-choice-casting">
+  <section class="slide" id="design-choice-casting-1">
    <h2>Casting</h2>
 
-   <pre><code></code></pre>
+   <pre><code>// Up casts: to more general
+myCat as Animal
+// Safety known during compilation.
 
-   <p></p>
+// Down casts: to more specific
+myAnimal as Cat
+// Safety can only be checked at runtime.</code></pre>
+
+   <p>Complicator: type introspection, RTTI not consistent across PLs.</p>
   </section>
 
   <section class="comment">
+   <p>Most object oriented languages have casting.</p>
+   <p>Type systems that allow sub-typing can over specify or under specify types at different times, and casting lets developers work around those limitations of the type system.</p>
+   <p>The problem is that only up casts can be known safe at compile time.
+    And when casting is safe is often subtle.  Temper developers shouldn't have to know multiple languages subtleties around casting to write safe code.</p>
+   <p>Unfortunately, not all languages provide enough information to test
+    whether a cast is safe before it happens.</p>
   </section>
 
-  <section class="slide" id="design-choice-overloads">
+  <section class="slide" id="design-choice-casting-1">
+   <h2>Casting</h2>
+
+   <p>Complicator: Some languages (e.g. Perl, PHP, JavaScript) do not distinguish between all of ints, floats, booleans, strings. 0 can mean different things.</p>
+
+   <p>Solution: Restrictions on down-casting. Sealed (product) types always castable.</p>
+  </section>
+
+  <section class="comment">
+   <p>If this complicator looks familiar, it is.  This came up when discussing basic generic operations like comparison.  Sometimes multiple Temper type are represented using the same target language type.  In many runtimes, it just doesn't make sense to ask "is this a boolean or an int?"; the answer is a "yes."</p>
+
+   <p>So we have a lot of restrictions on casting.</p>
+
+   <p>But we do relax that. A sealed type, a kind of product type where the compiler has access to all direct subtypes, allow the compiler to bake in extra code to enable safe checks. So casting from a sealed type to a direct subtype is checkable.</p>
+  </section>
+
+  <section class="slide" id="design-choice-overloads-1">
    <h2>Overloads</h2>
 
-   <pre><code></code></pre>
+   <pre lang="java"><code>class ByteBuffer { // Java
+    String toBase64() {&hellip;}
+    String toBase64(boolean webSafe) {&hellip;}
+    String toBase64(String alphabet) {&hellip;}
+}
+class ByteBuffer { // JavaScript/TypeScript
+    toBase64(x?: boolean | string): string {
+        switch (typeof x) {&hellip;}
+    }
+}</code></pre>
+  </section>
 
-   <p></p>
+  <section class="comment">
+   <p>Here's a class with some methods in Java, and then something
+    similar in JavaScript.</p>
+   <p>Maybe when converting bytes to base 64, there's a default
+    zero argument version of the `toBase64` operation, and two other variants.</p>
+   <p>Good library design requires providing conveniences, and overloading is one way to do that.</p>
+   <p>In the Java on the top, we've got three overloads: three methods with the same name distinguished by different argument types.</p>
+   <p>But in dynamic languages, like JavaScript, at the bottom, that doesn't work.</p>
+  </section>
+
+  <section class="slide" id="design-choice-overloads-2">
+   <h2>Overloads</h2>
+
+   <p>In typed languages, static dispatch works; overloading works. In many dynamic languages, all dispatch is static.</p>
+
+   <p>Goal: allow groups of related, overloadable dispatching while working on backends that allow no overloading.</p>
+
+   <p>Solution: Call-site overload resolution in language. </p>
+
+   <p>Stable names allow checking whether two declarations are the same between version 1.0.0 of a library and version 1.2.3.</p>
+  </section>
+
+  <section class="comment">
+   <p>It's very convenient to give every method a distinct name.</p>
+   <p>But we use cues and metadata to group methods together.</p>
+   <p>Backends receive method groups, not just methods, and can choose to present them as overloads or not.  Historical information ensures back-compat.
+  </section>
+
+  <section class="slide" id="signpost-5">
+   <p style="font-size: 110%">Why a translating language?</p>
+   <br>
+   <p style="font-size: 110%">Demos: making standards easier</p>
+   <br>
+   <p style="font-size: 110%">What do you, standards' maintainers, need?</p>
+   <br>
+   <p style="font-size: 110%">Designing for Translation</p>
+   <br>
+   <p style="font-size: 110%">&rArr; State of the Project</p>
+  </section>
+
+  <section class="comment">
+   <p>Next up, the state of the Temper project</p>
+  </section>
+
+  <section class="slide" id="state-of-project-1">
+   <h2>State of the Temper Project</h2>
+
+   <p>Six years of work</p>
+   <ul>
+    <li>Two years of comparative PL linguistics</li>
+    <li>Four years of language design & compiler implementation</li>
+   </ul>
+
+   <p>Lots of competing requirements.</p>
+
+   <p>But there's a nice, usable language in the middle,<br>familiar to everyday programmers.</p>
   </section>
 
   <section class="comment">
   </section>
-  
+
+  <section class="slide" id="state-of-project-2">
+   <h2>State of the Temper Project</h2>
+
+   <p>Infrastructure for making backends</p>
+
+   <p>Implemented initial set of backends to test different language families</p>
+   <ul>
+    <li>C#
+    <li>Java: legacy 8, modern 17
+    <li>JavaScript, with TypeScript comments
+    <li>Lua
+    <li>Python, with mypy types
+    <li>Rust
+    <li>In progress: C++ and some older language
+   </ul>
+
+   <p>Can make source breaking changes now</p>
+  </section>
+
+  <section class="comment">
+  </section>
+
   <section class="slide" id="lists">
    <h2>Lists</h2>
    <h3>This is an H3</h3>
