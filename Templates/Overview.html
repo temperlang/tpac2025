@@ -603,13 +603,39 @@ String encodeJson(Object o) {
 
   <section class="slide" id="design-choice-memory-2">
    <h2>Memory</h2>
-   <p>Solution: Make generic programming harder to make non-generic programming easier. Check type declarations and actuals based on points-to analysis. Between immutable records, that which is older cannot point to that which is younger.</p>
-   <pre><code>class Cons&lt;T&gt;(public head: T, public tail: Cons&lt;T&gt;?) {}</code></pre>
+   <p>Solution: Make generic programming harder to make non-generic programming easier. Static checks enforce points-to analysis to which prevent object-graph cycles making ref-counting sufficient for timely deallocation.</p>
 
-   <img src="mem-cycle-no.png" width="281" height="244" alt="Dot diagram.  Cons<T> points to itself with edge <.tail.  Cons<T> points to <T> via < .head, which then points back.  All edges are white"><img src="mem-cycle-yes.png" width="281" height="244" alt="Dot diagram.  Same as the previous, but the edge from Const<T> to <T> now reads 'var <= .head' and it and the edge back are red">
+   <p>Between immutable records, that which is older cannot point to that which is younger.</p>
   </section>
 
   <section class="comment">
+  </section>
+
+  <section class="slide" id="design-choice-memory-3">
+   <h2>Memory</h2>
+   <pre><code>class Cons&lt;F -| Cons&lt;F&gt;&gt;(public hd: F, public tail: Cons&lt;F&gt;?) {}</code></pre>
+
+   <img src="mem-cycle-no.png" width="215" height="212" alt="Dot diagram.  Cons&lt;F> points to itself with edge labeled '&lt;= : Cons&lt;F&gt;::tail'.  Cons&lt;F&gt; points to F via an edge labeled &lt;= Cons&lt;F&gt;::hd.  There are other nodes flowing into Cons&lt;F&gt; but Top and Top -| () which also flow into F.  F has a cycle with a node labeled Top -| (Cons&lt;F&gt;>)">
+  </section>
+
+  <section class="comment">
+   <p>Here's a recursive data type, a simple Lisp-style Cons list.</p>
+   <p>Each type involved has a node.</p>
+   <p>A Cons points to its head and tail.</p>
+   <p>A Cons instance's tail has to be older than it, so the loop there is all less-than edges.</p>
+   <p>A Cons's could point to something that points back to itself, so the programmer has to put some extra limitation.  We can have a Cons list that points to some other kind of Cons list.  A Cons&lt;Cons&lt;T&gt;&gt; can point to a Cons&lt;T&gt; but we can't let <i>T</i> bind to a thing that can point back to the same Cons&lt;T&gt; via a mutable property.</p>
+  </section>
+
+  <section class="slide" id="design-choice-memory-3">
+   <h2>Memory</h2>
+   <pre><code>class Cons&lt;F -| Cons&lt;F&gt;&gt;(public hd: F, public <u>var</u> tail: Cons&lt;F&gt;?) {}</code></pre>
+
+   <img src="mem-cycle-yes.png" width="215" height="212" alt="Dot diagram.  Same as the previous, but the edge from Cons&lt;F&gt; to itself now reads '< : Cons&lt;F&gt;::hd'. The <= has become a < and it is red.">
+  </section>
+
+  <section class="comment">
+   <p>But if we made the tail mutable, then a cons list could be relinked to create a cycle, note the less-than-or-equals edge.</p>
+   <p>This kind of cycle analysis just works for standard OCaml record style, but requires extra, implementation-detail leaking restrictions for generic types.</p>
   </section>
 
   <section class="slide" id="design-choice-concurrency-1">
@@ -798,6 +824,7 @@ class ByteBuffer { // JavaScript/TypeScript
     <li>Python, with mypy types
     <li>Rust
     <li>In progress: C++ and some older language
+    <li>Researched: D, Dart, Elixir, Go, Julia, Kotlin, OCaml, Perl, PHP, R, Racket, Ruby, Swift
    </ul>
 
    <p>Can make source breaking changes now</p>
@@ -805,7 +832,7 @@ class ByteBuffer { // JavaScript/TypeScript
 
   <section class="comment">
   </section>
-
+<!--
   <section class="slide" id="lists">
    <h2>Lists</h2>
    <h3>This is an H3</h3>
@@ -1270,7 +1297,7 @@ Lines in a PRE can be numbered
 
   <section class="slide lightmode">
    <h2>Image overlay: cover</h2>
-   <!-- Photo by AleRimoldi, source: https://commons.wikimedia.org/wiki/File:Statue_de_Gutenberg_%C3%A0_Strasbourg.jpg -->
+   <-- Photo by AleRimoldi, source: https://commons.wikimedia.org/wiki/File:Statue_de_Gutenberg_%C3%A0_Strasbourg.jpg ->
    <img width=500 height=667
 	src="../Templates/gutenberg_f9f9f9.jpg"
 	alt="Image: Statue of Gutenberg"
@@ -1286,7 +1313,7 @@ Lines in a PRE can be numbered
 
   <section class="slide lightmode">
    <h2>Image overlay: fit</h2>
-   <!-- Photo by AleRimoldi, source: https://commons.wikimedia.org/wiki/File:Statue_de_Gutenberg_%C3%A0_Strasbourg.jpg -->
+   <-- Photo by AleRimoldi, source: https://commons.wikimedia.org/wiki/File:Statue_de_Gutenberg_%C3%A0_Strasbourg.jpg ->
    <img width=500 height=667
 	src="../Templates/gutenberg_f9f9f9.jpg"
 	alt="Image: Statue of Gutenberg"
@@ -1379,7 +1406,6 @@ Lines in a PRE can be numbered
    <p>Notes.</p>
   </section>
 
-
   <section class="slide">
    <h2>Convert to PDF</h2>
 
@@ -1436,6 +1462,7 @@ Lines in a PRE can be numbered
   <section class=comment>
    <p>Notes.</p>
   </section>
+-->
 
 
   <!--=============================================================
