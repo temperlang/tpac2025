@@ -72,51 +72,85 @@
     Leaving slide mode.
   </div>
 
+  <style>
+   h2.one-idea { padding-top:2em; text-align:center }
+   blockquote { padding-left: 2em; font-size: 110% }
+  </style>
 
   <section class="slide cover clear" id="cover">
    <h1>Lightweight Standards</h1>
    <h2 style="font-size: 80%">by deriving reference implementations for many programming languages</h2>
-   <address>Mike Samuel<br><small>Chief Language Designer, Temper</small></address>
+   <address>Mike Samuel<br><small>Chief Language Designer, Temper</small>
+   <br><small><tt>mikesamuel@gmail.com</tt> / <tt>@mvsamuel.bsky.social</tt></small></address>
    <p class=event>TPAC 2025<br>
      Kobe, Japan &amp; online<br>
      10–14 November 2025</p>
   </section>
 
-  <section class="slide" id="about-me">
+  <section class="slide" id="main-question">
+   <h2 class="one-idea">How would being able to deliver a library to every programming language community help?</h2>
+  </section>
+  <section class="comment">
+   <p>The main question I hope to address:
+    I've got a programming language that translates to all the others.
+    You can write a library and get a JavaScript library, and another for Python, and another for C#.
+   </p>
+   <p>
+    How might it help the process of delivering standards?
+    How might it help developers downstream of the standards?
+    How might it help the tool ecosystems that arise around standards?
+    How might it help smooth work between W3C groups?</p>
+  </section>
+
+  <section class="slide" id="not-ai">
+   <h2 class="one-idea">This is <i>not</i> an AI talk</h2>
+  </section>
+
+  <section class="comment">
+   <p>And just to get something out of the way early.  This is not an
+   AI talk.  People hear "code translation" and they think AI, LLMs.
+   If you like AI talks, that's cool, but I do compilers.</p>
+  </section>
+
+  <section class="slide cut-in" id="about-me">
    <h2>Obligatory about me</h2>
-   <ul>
-    <li>1990s, CMU Field Robotics: Programming languages for robotic systems</li>
-    <li>17 years at Google: First frontender Google Calendar, eng <u>I18N</u> lead</li>
-    <li>Briefly on Calconnect standards, longtime <u>TC39</u> (JavaScript) member</li>
-    <li>Caja, object-capabilities PLs on web stack & early <u>websec</u> research</li>
-    <li>PL approaches to security engineering including <u>secure HTML</u> composition</li>
-    <li>Transferring sec-eng lessons to OSS stacks & dynlangs</li>
-    <li>Now: Language Designer, Temper</li>
+   <ul class="quick">
+    <li class="next">1990s, CMU Field Robotics: Programming languages for robotic systems</li>
+    <li class="next">17 years at Google: First frontender Google Calendar, eng <u>I18N</u> lead</li>
+    <li class="next">Briefly on Calconnect standards, longtime <u>TC39</u> (JavaScript) member</li>
+    <li class="next">Caja, object-capabilities PLs on web stack, early <u>web security</u> research</li>
+    <li class="next">PL approaches to <u>security engineering</u> including <u>secure HTML</u> composition</li>
+    <li class="next">Transferring sec-eng lessons to OSS stacks & dynlangs</li>
+    <li class="next">Now: Language Designer, Temper</li>
    </ul>
   </section>
 
   <section class=comment>
-   <p>Here's a bit about me.  If you're focused on I18N, the web
-   stack, security, I have enough practical experience so I feel like
-   we can have productive discussions.<p>
+   <p>First a bit about me.  If you're focused on I18N, the web stack,
+   security, distributed systems, or developer tools; I probably have
+   enough practical experience for us to have productive
+   discussions.<p>
 
    <p>My primary focus is programming languages, developer tools,
    helping developers make better, more reliable systems. Especially
-   multi-language distributed systems.</p>
+   today's multi-language, distributed systems.</p>
 
    <p>My introduction to the web was Google Calendar. Google's second
    or third big, JavaScript heavy web application. I wrote large
-   chunks of the first frontend. And I was calendar's first I18N
-   engineering lead during Google's internal 40-languages initiative.</p>
+   chunks of the first frontend. And I was calendar's first
+   internationalization lead during Google's internal forty languages
+   initiative.</p>
 
-   <p>I've done standards work before: Calconnect briefly, TC39.
-   Most recently, in W3 I edited an early version of the trusted types spec,
-   but I am not currently part of a member org.</p>
+   <p>I've done standards work before: Calconnect briefly, TC39 for a
+   long time.  Most recently, in W3 I edited an early version of the
+   trusted types spec.</p>
 
-   <p>And I've done a lot of work on security engineering. I am not
-   a cryptographer. I come at security from the programming languages
-   and developer tools perspective; for example, how can template languages
-   help developers produce XSS-free HTML.</p>
+   <p>And I spent a decade in security engineering. I am not a
+   cryptographer. I come at security from the perspective of how
+   better tools, for example, XSS-safe template languages, help
+    developers produce more secure systems.</p>
+
+   <p>And now, I am the </p>
   </section>
 
   <section class="slide" id="signpost-1">
@@ -132,12 +166,12 @@
   </section>
 
   <section class=comment>
-   <p>I want this talk to be interactive. I'll set the stage with a demo.<p>
+   <p>I want this talk to be interactive. I'll set the stage with some
+   background and demos.<p>
 
-   <p>Then I'd like you all to drive the discussion. We're working towards
-   a version 1.0 for the language, where compatibility-breaking changes become
-   hard. How can we deliver a language that is good for developers and good for
-   standards maintainers?</p>
+   <p>Then I'd like you all to drive the discussion.
+    How can we deliver a language that is good for developers and good for
+    standards maintainers?</p>
 
    <p>If you all are intersted in programming language design,
    I have prepared some remarks on what makes Temper different.</p>
@@ -152,12 +186,12 @@
    <h2>Temper in a Nutshell</h2>
    <p>A programming language
    <ul class=quick>
-    <li class=next>designed to translate well to all the others</li>
-    <li class=next>via compiler methods (not LLMs)</li>
-    <li class=next>for making libraries usable by every PL community</li>
-    <li class=next>usable by everyday programmers</li>
-    <li class=next>by translation to the local language, no virtual machine barrier</li>
-    <li class=next>that enables lightweight standards efforts.</li>
+    <li class="next">designed to translate well to all the others</li>
+    <li class="next">via compiler methods (not LLMs)</li>
+    <li class="next">for making libraries usable by every PL community</li>
+    <li class="next">usable by everyday programmers</li>
+    <li class="next">by translation to the local language, no virtual machine barrier</li>
+    <li class="next">that enables lightweight standards efforts.</li>
    </ul>
   </section>
 
@@ -170,7 +204,7 @@
 
    <figure class="side">
     <a href="stackoverflow-tech-cluster-graph.png"><img src="stackoverflow-tech-cluster-graph.png"  alt="Dot cluster graph with technology names like Django, Android, Kubernetes, TypeScript. There are clusters with large labels: Data Science towards the top centered around Python, Mobile on the right centered around Android and Java nodes, Srvices on the left centered around Docker and Linux, Windows Native at the bottom left centered around .NET and Windows, and Web at the bottom centered around JavaScript and HTML/CSS.  The legend on the far right has two sections. First header Type with colored node legend for Database, Framework, Language, Platform.  Second header explains that node size indicates percentage of developers using a very large circle indicating 60%."></a>
-    <caption>"How Technologies Are Connected" from stackoverflow 2020 developer survey</caption>
+    <caption>"How Technologies Are Connected" from stack<b style="font-weight:800%">overflow</b> 2020 developer survey</caption>
    </figure>
 
    <p>Data scientists use Python/Julia/R.<br>Web uses JavaScript/TypeScript.<br>Backenders use typed PitL PLs.</br>App devs use Kotlin/Swift/Java (Dalvik).</p>
@@ -454,28 +488,45 @@
   </section>
 
   <section class="slide" id="complicators-1a">
-   <h2>What complicates translation? (1)</h2>
+   <h2>What complicates translation?</h2>
 
-   <p>Embedded assumptions about the source language.</p>
+   <h3>Embedded assumptions about the source language.</h3>
 
-   <blockquote>
+   <p><blockquote>
     Now is the winter of our discontent
     <br>Made glorious summer by this <b>sun of York</b>;
     <br>- Shakespeare
-   </blockquote>
+   </blockquote></p>
 
-   <p>Summer ... winter ... sun of York.<br>son of York: King Edward IV</p>
+   <p>S<u>u</u>n of York.<br>S<u>o</u>n of York: King Edward IV</p>
 
-   <p><i>Sun</i> and <i>son</i> sound the same in English, but not in most other languages.</p>
+   <p>Embedded assumption:<br><i>Sun</i> and <i>son</i> sound the same in English.</p>
   </section>
 
   <section class=comment>
+   <p>What complicates translation? I'm going to list a few
+   things. I'll start off with a natural language example, and then
+   show code that has a similar difficulty. This isn't meant to be
+   exhaustive, just illustrative of the kind of surprises that await
+   if you try to take an existing programming language, one not
+   designed to translate well, and then naively translate it.</p>
+
+   <p>As an example of an embedded assumption, here's a famous passage
+   from Shakespeare:</p>
+
+   <p>Now is the winter of our discontent; made glorious summer by
+   this sun of York.</p>
+
+   <p>There's a pun there.  With an 'o', son of York refers to
+   Edward the fourth who was raised in York.</p>
+
+   <p>That pun won't translate easily to languages where the
+   correpsonding words don't sound the same, for example the French
+   fil et sol don't.</p>
   </section>
 
   <section class="slide" id="complicators-1b">
-   <h2>What complicates translation? (1)</h2>
-
-   <p>Embedded assumptions about the source language.</p>
+   <h2>What complicates translation?</h2>
 
    <pre><code>// Java
 String encodeJson(Object o) {
@@ -484,48 +535,87 @@ String encodeJson(Object o) {
    } else if (o instanceof Boolean) {
        return ((Boolean) o) ? "true" : "false";
    } else &hellip;
-}
-   </code></pre>
+}</code></pre>
 
-   <p>In Java, no <i>Integer</i> is a <i>Boolean</i>.<br>
+   <p>In Java, no <i>Boolean</i> is an <i>Integer</i>.
     In Python, every <i>bool</i> is an <i>int</i>.</p>
   </section>
 
   <section class=comment>
+   <p>Here's a fragment of code with an embedded assumption.</p>
+   <p>It encodes a value as JSON.  If o is an integer, it formats as decimal.</p>
+   <p>Otherwise, if o is a boolean it returns the keyword.</p>
+   <p>But there's an order to those tests.  The Java version works
+   because the first test will fail if the second succeeds.  There's an
+   embedded assumption, true in Java, that booleans are not
+   integers.</p>
+   <p>Python got a distinct bool type around version 2.3 or 2.4, but until
+   then people just used 1 and 0 for true and false.  Python already had a
+   "not" operator that returned an int.  Rather than introduce a new "not"
+   operator they just reused the old one but it changed from returning ints
+   to returning ints that are also bools.</p>
   </section>
 
   <section class="slide" id="complicators-2a">
-   <h2>What complicates translation? (2)</h2>
+   <h2>What complicates translation?</h2>
 
-   <p>What you must specify.</p>
+   <h3>What must you specify?</h3>
 
-   <p>In English, you may include honorifics: "<i>Dame</i> Julie Andrews."</p>
+   <p>In English, you may include honorifics: "<i>Mr.</i> Fred Rogers," or you can omit them: "Fred Rogers."</p>
+   <!-- TODO: Is Fred, Mr. Roger's first name, or Frank? -->
 
-   <p>In Japanese, honorifics are required, e.g. <i>San</i>.</p>
+   <p>In Japanese, honorifics are required in normal speech, e.g. <i>san</i> following an adult's name.</p>
 
-   <p>A translator must synthesize missing elements.</p>
+   <p>A translator must synthesize missing, required elements.</p>
   </section>
 
   <section class="comment">
+   <p>Next complication: in almost any language, you can express a given idea, but
+   in some, you have to express certain other things.</p>
+   <p>For example, in English, you can specify honorifics: Mister or Mrs.  Often you don't.</p>
+   <p>In Japanese, it's unidiomatic to leave them out.</p>
+   <p>A translator must synthesize missing, required elements. In the case of honorifics, this might require researching the relative status of the speaker and the addressee.</p>
   </section>
 
   <section class="slide" id="complicators-2b">
-   <h2>What complicates translation? (2)</h2>
+   <h2>What complicates translation?</h2>
 
-   <p>In Java, you can specify optionality:</p>
+   <p>In Java, you may specify optionality:</p>
 
-   <pre><code>String numberToString(int num, @Nullable Integer radix)&hellip;</code></p>
+   <pre><code>String numberToString(int num, <u>@Nullable</u> Integer radix)&hellip;</code></pre>
 
    <p>In Rust, you must:</p>
 
-   <pre><code>fn numberToString(num: i32, radix: option&lt;i32&gt;) -> &hellip;</code></pre>
+   <pre><code>fn numberToString(num: i32, radix: <u>option</u>&lt;i32&gt;) -> &hellip;</code></pre>
   </section>
 
   <section class="comment">
+   <p>This shows up in code.  In Java, you can specify whether an input is optional; whether you can pass in null if you don't care.  In Rust, you must.  There is no null singleton so you need to use an option type.</p>
   </section>
 
   <section class="slide" id="complicators-3">
-   <h2>What complicates translation? (3)</h2>
+   <h2>What complicates translation?</h2>
+   <h3>Same idea, but also different</h3>
+
+   <table>
+    <tr><th align=left width=40%>German</th><th align=left width=40%>English</th></tr>
+    <tr><td>Geist</td><td>ghost</td></tr>
+    <tr><td>Zeitgeist</td><td><u>spirit</u> of the times</td></tr>
+   </table>
+
+   <p>Geist can often translate to ghost.
+   <br>But you can't say the "ghost of the times" in English.
+   "Spirit" can mean essence, but "ghost" conveys disembodied-ness.</p>
+
+   <p>Strings!</p>
+  </section>
+
+  <section class="comment">
+   <p></p>
+  </section>
+
+  <section class="slide" id="complicators-4">
+   <h2>What complicates translation?</h2>
 
    <p>Ad-hoc types: tuples, arrow types.</p>
 
@@ -626,7 +716,7 @@ String encodeJson(Object o) {
    <p>A Cons's could point to something that points back to itself, so the programmer has to put some extra limitation.  We can have a Cons list that points to some other kind of Cons list.  A Cons&lt;Cons&lt;T&gt;&gt; can point to a Cons&lt;T&gt; but we can't let <i>T</i> bind to a thing that can point back to the same Cons&lt;T&gt; via a mutable property.</p>
   </section>
 
-  <section class="slide" id="design-choice-memory-3">
+  <section class="slide" id="design-choice-memory-4">
    <h2>Memory</h2>
    <pre><code>class Cons&lt;F -| Cons&lt;F&gt;&gt;(public hd: F, public <u>var</u> tail: Cons&lt;F&gt;?) {}</code></pre>
 
@@ -718,7 +808,7 @@ myAnimal as Cat
     whether a cast is safe before it happens.</p>
   </section>
 
-  <section class="slide" id="design-choice-casting-1">
+  <section class="slide" id="design-choice-casting-2">
    <h2>Casting</h2>
 
    <p>Complicator: Some languages (e.g. Perl, PHP, JavaScript) do not distinguish between all of ints, floats, booleans, strings. 0 can mean different things.</p>
@@ -813,26 +903,92 @@ class ByteBuffer { // JavaScript/TypeScript
   <section class="slide" id="state-of-project-2">
    <h2>State of the Temper Project</h2>
 
-   <p>Infrastructure for making backends</p>
-
    <p>Implemented initial set of backends to test different language families</p>
-   <ul>
-    <li>C#
-    <li>Java: legacy 8, modern 17
-    <li>JavaScript, with TypeScript comments
-    <li>Lua
-    <li>Python, with mypy types
-    <li>Rust
-    <li>In progress: C++ and some older language
-    <li>Researched: D, Dart, Elixir, Go, Julia, Kotlin, OCaml, Perl, PHP, R, Racket, Ruby, Swift
-   </ul>
+   <table>
+    <tr valign=top>
+     <td width=33%>C#</td>
+     <td width=34%>Java:<br>legacy 8, modern 17</td>
+     <td width=33%>JavaScript<br>with TS comments</td>
+    </tr>
+    <tr valign=top>
+     <td>Lua</td>
+     <td>Python3<br>with mypy types</td>
+     <td>Rust</td>
+    </tr>
+    <tr valign=top>
+     <th align=left>In progress:</td><td colspan=2>C++ and some older languages</td>
+    </tr>
+    <tr valign=top>
+     <th align=left>Researched:</td><td colspan=2>C, D, Dart, Elixir, Go, Julia, Kotlin, OCaml, Perl5, PHP, R, Racket, Ruby, Swift, Zig</td>
+    </tr>
+   </table>
 
-   <p>Can make source breaking changes now</p>
   </section>
 
   <section class="comment">
   </section>
-<!--
+
+  <section class="slide" id="state-of-project-3">
+   <h2>State of the Temper Project</h2>
+
+   <table>
+    <tr>
+     <th width="10%">&check;</th><td width="35%">Stable syntax</td>
+     <th width="10%">&check;</th><td width="35%">Backend infrastructure</td>
+    </tr>
+    <tr>
+     <th>&check;</th><td>Reference documentation</td>
+     <th>&check;</th><td>Command line tools</td>
+    </tr>
+    <tr>
+     <th>&check;</th><td>VSCode Plugin</td>
+     <th>&check;</th><td>Standard Library</td>
+    </tr>
+    <tr>
+     <th>&check;</th><td>Playground<u>s</u></td>
+     <th>~</th><td>Static Checks</td>
+    </tr>
+    <tr>
+     <th>~</th><td>Type System</td>
+     <th>~</th><td>Backward compat checks</td>
+    </tr>
+    <tr>
+     <th>TODO</th><td>Incremental compilation</td>
+     <th>TODO</th><td>Stable version metadata</td>
+    </tr>
+    <tr>
+     <th>TODO</th><td>Library repository</td>
+     <th>TODO</th><td>Next dozen backends</td>
+    </tr>
+   </table>
+  </section>
+
+  <section class="comment">
+  </section>
+
+  <section class="slide" id="state-of-project-4">
+   <h2>State of the Temper Project</h2>
+
+   <p style="font-size:225%">Can make breaking changes now!</p>
+  </section>
+
+  <section class="comment">
+  </section>
+
+  <section class="slide cover clear" id="end-cover">
+   <h1>Lightweight Standards</h1>
+   <h2 style="font-size: 80%">by deriving reference implementations for many programming languages</h2>
+   <address>Mike Samuel<br><small>Chief Language Designer, Temper</small>
+   <br><small><tt>mikesamuel@gmail.com</tt> / <tt>@mvsamuel.bsky.social</tt></small></address>
+   <p class=event>TPAC 2025<br>
+     Kobe, Japan &amp; online<br>
+     10–14 November 2025</p>
+  </section>
+
+  <section class="comment">
+  </section>
+
+<template>
   <section class="slide" id="lists">
    <h2>Lists</h2>
    <h3>This is an H3</h3>
@@ -1297,7 +1453,7 @@ Lines in a PRE can be numbered
 
   <section class="slide lightmode">
    <h2>Image overlay: cover</h2>
-   <-- Photo by AleRimoldi, source: https://commons.wikimedia.org/wiki/File:Statue_de_Gutenberg_%C3%A0_Strasbourg.jpg ->
+   <!-- Photo by AleRimoldi, source: https://commons.wikimedia.org/wiki/File:Statue_de_Gutenberg_%C3%A0_Strasbourg.jpg -->
    <img width=500 height=667
 	src="../Templates/gutenberg_f9f9f9.jpg"
 	alt="Image: Statue of Gutenberg"
@@ -1313,7 +1469,7 @@ Lines in a PRE can be numbered
 
   <section class="slide lightmode">
    <h2>Image overlay: fit</h2>
-   <-- Photo by AleRimoldi, source: https://commons.wikimedia.org/wiki/File:Statue_de_Gutenberg_%C3%A0_Strasbourg.jpg ->
+   <!-- Photo by AleRimoldi, source: https://commons.wikimedia.org/wiki/File:Statue_de_Gutenberg_%C3%A0_Strasbourg.jpg -->
    <img width=500 height=667
 	src="../Templates/gutenberg_f9f9f9.jpg"
 	alt="Image: Statue of Gutenberg"
@@ -1462,7 +1618,7 @@ Lines in a PRE can be numbered
   <section class=comment>
    <p>Notes.</p>
   </section>
--->
+</template>
 
 
   <!--=============================================================
