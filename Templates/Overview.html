@@ -75,13 +75,18 @@
   <style>
    h2.one-idea { padding-top:2em; text-align:center }
    blockquote { padding-left: 2em; font-size: 110% }
+   span.c-com { color: violet }
+   span.c-str { color: pink }
+   span.c-kwd { color: cyan }
+   span.c-lit { color: cyan }
+   span.c-id  { color: lightblue }
   </style>
 
   <section class="slide cover clear" id="cover">
    <h1>Lightweight Standards</h1>
    <h2 style="font-size: 80%">by deriving reference implementations for many programming languages</h2>
    <address>Mike Samuel<br><small>Chief Language Designer, Temper</small>
-   <br><small><tt>mikesamuel@gmail.com</tt> / <tt>@mvsamuel.bsky.social</tt></small></address>
+   <br><small><tt>mikesamuel@gmail.com</tt> / <tt>@mvsamuel.bsky.social</tt></small><br><small><tt>temperlang.github.io/tld/</tt></small></address>
    <p class=event>TPAC 2025<br>
      Kobe, Japan &amp; online<br>
      10–14 November 2025</p>
@@ -795,21 +800,36 @@ String encodeJson(Object o) {
    <p>Result types are a principled approach to error handling.  It turns out that if you don't treat them as first class, then you can provide good support both to languages that have them and to languages that use exceptions.</p>
   </section>
 
-  <section class="slide" id="design-choice-generic-operations">
+  <section class="slide" id="design-choice-generic-operations-1">
    <h2>Generic Operations</h2>
 
    <p>Goal: Consistent semantics for basic operations</p>
-   <table><tr><th>comparison<td><code>2 < 11 && "2" > "11"</code></tr>
-    <tr><th>stringification<td><code>"${1.0}" == "1.0"</code></tr>
+   <table><tr><th>comparison<td><code><span class="c-lit">2</span><span class="c-pun"> &lt; </span><span class="c-lit">11</span><span class="c-pun"> && </span><span class="c-str">"11"</span><span class="c-pun"> &lt; </span><span class="c-str">"2"</span></code></tr>
+    <tr><th>stringification<td><code><span class="c-str">"</span><span class="c-pun">${</span><span class="c-lit">1.0</span><span class="c-pun">}</span><span class="c-str">"</span><span class="c-pun"> == </span><span class="c-str">"1.0"</span></code></tr>
    </table>
    <p>These should distribute through generic containers:
-    <br><code>"${ [0, 1] }" != "${ [false, true] }"</code></p>
-   <p>Complicator: Some languages (e.g. Perl, PHP, JavaScript) do not distinguish between all of <i>int</i>s, <i>float</i>s, <i>boolean</i>s, <i>strings</i>. <code>0</code> can mean different things.</p>
-   <p>Complicator: Need to connect multiple Temper types to one target language types, prevents RTTI.</p>
-   <p>Solution: Type reification that desugars provides just enough trait-like behaviour.</p>
+    <br><code><span class="c-str">"</span><span class="c-pun">${ [</span><span class="c-lit">0</span><span class="c-pun">,</span><span class="c-lit"> 1</span><span class="c-pun">] }</span><span class="c-str">"</span><span class="c-pun"> != </span><span class="c-str">"</span><span class="c-pun">${ [</span><span class="c-kwd">false</span><span class="c-pun">,</span><span class="c-kwd"> true</span><span class="c-pun">] }</span><span class="c-str">"</span></code></p>
   </section>
 
   <section class="comment">
+   <p>Generic operations.  A generic operation is one where the type of an input affects part of the operation, but often most of it doesn't depend on the type.</p>
+   <p>As you can see here, the less-than operator is generic.  It can apply to numbers or to strings.  When applied to numbers, it does numeric comparison.  When applied to strings, it does lexicographic comparison.</p>
+   <p>And when we convert a floating point number to a string, we want some consistency.</p>
+   <p>But some dynamic languages don't make the distinctions I just outlined.</p>
+  </section>
+
+  <section class="slide" id="design-choice-generic-operations-2">
+   <h2>Generic Operations</h2>
+   <p>Complicator: Some languages (e.g. Perl, PHP, JavaScript) do not distinguish between all of <i>int</i>s, <i>float</i>s, <i>boolean</i>s, <i>strings</i>. <code>0</code> can mean different things.</p>
+   <p>Complicator: Cannot trust RTTI because can connect multiple Temper types to one target language type.</p>
+   <p>Solution: Type reification that desugars provides just enough trait-like dispatch, and threads through generic programs.</p>
+  </section>
+
+  <section class="comment">
+   <p>Notably, Perl, PHP, and JavaScript do this.  Perl and PHP have a scalar type that covers numbers, strings, and booleans.  JavaScript has a number type that is used for all floating point computation, and most integer computations.</p>
+   <p>That means we can't have one comparison function that looks at the type of its arguments.  Not only does the performance suck, but there just isn't enough information at runtime.</p>
+   <p>That's our solution.  We solved this problem because we had to by repurposing a number of well-understood PL techniques but existing languages just won't because they languages grew up alongside a runtime.  That's a lot of jargon, but I'm happy to explain offline.</p>
+   <p>But because we solved this, that uncontroversial, to developers', behaviour of comparisons and stringification can just work.</p>
   </section>
 
   <section class="slide" id="design-choice-memory-1">
@@ -817,12 +837,15 @@ String encodeJson(Object o) {
    <p>Goal: timely deallocation even for programs written by non-systems-language users.</p>
    <p>Goal: common OCaml discipline (immutable records) just work.</p>
 
-   <p>Complicator: many languages do not have garbage collection that handles cycles (C, C++, Rust, Swift, (even, strangely, Python)).</p>
+   <p>Complicator: Important languages do not have garbage collection that handles cycles: C, C++, Rust, Swift</p>
 
-   <p>Complicator: Memory cycles prevent deallocation. Linear type discipline has not proven usable by working developers at large.</p>
+   <p>Linear type discipline requires a high-skill level.</p>
   </section>
 
   <section class="comment">
+   <p>We want people to be able to write Temper libraries that don't leak memory even if they're not familiar with memory pitfalls in C++ AND Rust AND Swift.</p>
+   <p>Our target audience is not just people skilled at manual memory management.</p>
+   <p>But we need to translate to those languages which require some care because they don't have cycle-safe garbage collectors.</p>
   </section>
 
   <section class="slide" id="design-choice-memory-2">
@@ -833,6 +856,11 @@ String encodeJson(Object o) {
   </section>
 
   <section class="comment">
+   <p>This was a tough call. There's no make-memory-easy option.</p>
+
+   <p>What we ended up with is a bit different, but it keeps the burden on more specialized library developers who maintain core, generic libraries.</p>
+
+   <p>We added static checks to class declarations, which can point to things.  And we also statically checks generic type phrases.</p>
   </section>
 
   <section class="slide" id="design-choice-memory-3">
@@ -860,11 +888,11 @@ String encodeJson(Object o) {
   <section class="comment">
    <p>But if we made the tail mutable, then a cons list could be relinked to create a cycle, note the less-than-or-equals edge.</p>
    <p>This kind of cycle analysis just works for standard OCaml record style, but requires extra, implementation-detail leaking restrictions for generic types.</p>
+   <p>The basic idea here is: if the less-than edges don't form a cycle, then there exists an order in which reference-counted records will destruct.  But if node has to be less-than itself, a contradiction, then there is no order and we don't know that it'll deallocate.</p>
   </section>
 
   <section class="slide" id="design-choice-concurrency-1">
    <h2>Concurrency</h2>
-   <p>Temper Design Choice: Concurrency</p>
 
    <p>Goal: safe usable concurrency. Do not consume resources (system threads) for every outstanding network message.</p>
 
@@ -875,13 +903,17 @@ String encodeJson(Object o) {
   </section>
 
   <section class="comment">
+   <p>Concurrency lets a programmer compute an answer without controlling the order in which everything happens; I will need an answer to this sub-problem, so I'll start it now, but I don't care whether it happens before or after this next thing I do as long as I get the answer.</p>
+   <p>Widely used languages have a lot of different takes on concurrency.</p>
+   <p>Unfortunately, concurrency done wrong can lead to memory corruption.</p>
+   <p>So Temper can't put the safety burden on developers; our target audience isn't just people who know how to avoid unsafe pointer writes.</p>
+   <p>Our solution here is really just, figure out what familiar, safe abstraction can we cobble together on a runtime that has at least one of these widely available affordances.</p>
   </section>
 
   <section class="slide" id="design-choice-concurrency-2">
    <h2>Concurrency</h2>
 
-   <p>Work queues can handle stepping a coroutine that awaits a satisfied promise.<br>
-The in-process actor model allows mutually exclusive access to shared resources.</p>
+   <p>Work queues can handle stepping a coroutine that awaits a satisfied promise.<br>The in-process actor model allows mutually exclusive access to shared resources.</p>
 
    <p>Solution: Optionally implement state-machine coroutine conversion during pre-translation.
     <br>No non-thread-safe top-levels (except in REPL).
@@ -889,12 +921,14 @@ The in-process actor model allows mutually exclusive access to shared resources.
   </section>
 
   <section class="comment">
+   <p>So we can provide coroutines, and we can provide promises, and they work pretty well together.</p>
+   <p>And we put some restrictions on globally mutable state to provide safety.</p>
   </section>
 
   <section class="slide" id="design-choice-strings">
    <h2>Strings</h2>
 
-   <p>What does <code>myString[i]</code> mean?</p>
+   <p>What does <code><span class="c-id">myString</span><span class="c-pun">[<span class="c-id">i</span><span class="c-pun">]</span></code> mean? What even is a "character"?</p>
 
    <table width=100%>
     <tr><td>Rust</td><td>index by UTF-8 code unit</td></tr>
@@ -913,10 +947,16 @@ The in-process actor model allows mutually exclusive access to shared resources.
     across languages.
    </p>
    <p>
-    What does myString brackets i mean?
+    What does it mean to get the i-th "character"?  What even is a character?
    </p>
-   <p>You can see in this table, languages fall into two main groups:
-    byte-based, the first two rows, and byte pair based
+   <p>You can see in this table, languages fall into two main groups, but
+    there's a lot of variation.
+    Some PLs are byte-based, the first two rows, and some are UTF-16, byte-pair
+    based.  Python is codepoint based.
+   </p>
+   <p>Temper arrived at the same approach as Swift, which allows it to provide
+    a consistent code-point based semantics, like Python, but to be efficient
+   on other runtimes.</p>
   </section>
 
   <section class="slide" id="design-choice-casting-1">
@@ -934,10 +974,13 @@ myAnimal as Cat
   </section>
 
   <section class="comment">
-   <p>Most object oriented languages have casting.</p>
-   <p>Type systems that allow sub-typing can over specify or under specify types at different times, and casting lets developers work around those limitations of the type system.</p>
-   <p>The problem is that only up casts can be known safe at compile time.
-    And when casting is safe is often subtle.  Temper developers shouldn't have to know multiple languages subtleties around casting to write safe code.</p>
+   <p>Type systems that allow sub-typing can over specify or under
+   specify types at different times, and casting lets developers work
+   around those limitations of the type system.</p>
+   <p>The problem is that only upward casts can be known safe at compile
+    time.  And when casting is safe is often subtle.  Temper
+    developers shouldn't have to know multiple languages subtleties
+    around casting to write safe code.</p>
    <p>Unfortunately, not all languages provide enough information to test
     whether a cast is safe before it happens.</p>
   </section>
@@ -951,17 +994,33 @@ myAnimal as Cat
   </section>
 
   <section class="comment">
-   <p>If this complicator looks familiar, it is.  This came up when discussing basic generic operations like comparison.  Sometimes multiple Temper type are represented using the same target language type.  In many runtimes, it just doesn't make sense to ask "is this a boolean or an int?"; the answer is a "yes."</p>
+   <p>If this complicator looks familiar, it is.  This came up when
+   discussing basic generic operations like comparison.  Sometimes
+   multiple Temper type are represented using the same target language
+   type.  In many runtimes, it just doesn't make sense to ask "is this
+   a boolean or an int?"; the answer is a "yes."</p>
 
    <p>So we have a lot of restrictions on casting.</p>
 
-   <p>But we do relax that. A sealed type, a kind of product type where the compiler has access to all direct subtypes, allow the compiler to bake in extra code to enable safe checks. So casting from a sealed type to a direct subtype is checkable.</p>
+   <p>But we do relax that. A sealed type, a kind of product type
+   where the compiler has access to all direct subtypes, allow the
+   compiler to bake in extra code to enable safe checks. So casting
+    from a sealed type to a direct subtype is checkable.</p>
+
+   <p>This is a common pattern.  Constrain what developers can write
+   so that we know we can reliably translate it.
+   But then provide a familiar affordance from other languages so
+   that developer's have a way to do what they need and can build
+   on their experiences with popular languages.</p>
   </section>
 
   <section class="slide" id="design-choice-overloads-1">
    <h2>Overloads</h2>
 
-   <pre lang="java"><code>class ByteBuffer { // Java
+   <img alt="Screenshot of two snippets, one in Java and one in JS/TS.
+Both start with "class ByteBuffer". Text follows:
+
+class ByteBuffer { // Java
     String toBase64() {&hellip;}
     String toBase64(boolean webSafe) {&hellip;}
     String toBase64(String alphabet) {&hellip;}
@@ -970,7 +1029,7 @@ class ByteBuffer { // JavaScript/TypeScript
     toBase64(x?: boolean | string): string {
         switch (typeof x) {&hellip;}
     }
-}</code></pre>
+}" src="code-sample-bytebuffer-overloads.png">
   </section>
 
   <section class="comment">
@@ -998,7 +1057,14 @@ class ByteBuffer { // JavaScript/TypeScript
   <section class="comment">
    <p>It's very convenient to give every method a distinct name.</p>
    <p>But we use cues and metadata to group methods together.</p>
-   <p>Backends receive method groups, not just methods, and can choose to present them as overloads or not.  Historical information ensures back-compat.
+
+   <p>Backends receive method groups, not just methods, and can choose
+   to present them as overloads or not.  We have a way to store
+   historical information, information about what a particular
+   published version, so a backend can store information about which
+   could be grouped based on the language's signature collision
+   requirements and the backend can use that to make backwards
+   compatible choices.</p>
   </section>
 
   <section class="slide" id="signpost-5">
@@ -1014,7 +1080,7 @@ class ByteBuffer { // JavaScript/TypeScript
   </section>
 
   <section class="comment">
-   <p>Next up, the state of the Temper project</p>
+   <p>Finally, the state of the Temper project</p>
   </section>
 
   <section class="slide" id="state-of-project-1">
@@ -1028,10 +1094,16 @@ class ByteBuffer { // JavaScript/TypeScript
 
    <p>Lots of competing requirements.</p>
 
-   <p>But there's a nice, usable language in the middle,<br>familiar to everyday programmers.</p>
+   <p>But there's a nice, usable language in the middle,<br>familiar
+   to everyday programmers.</p>
   </section>
 
   <section class="comment">
+   <p>We've been at this for six years.</p>
+   <p>Two years just understanding the problem space.</p>
+   <p>Four implementing the compiler frontend and backends.</p>
+   <p>There are a lot of competing requirements.  It's not obvious that there are non-interfering solutions.</p>
+   <p>But I think we've got a nice, usable language.  It's getting to be fun to work in.</p>
   </section>
 
   <section class="slide" id="state-of-project-2">
@@ -1050,16 +1122,20 @@ class ByteBuffer { // JavaScript/TypeScript
      <td>Rust</td>
     </tr>
     <tr valign=top>
-     <th align=left>In progress:</td><td colspan=2>C++ and some older languages</td>
+     <th align=left>In progress:</th><td colspan=2>C++ and some older languages</td>
     </tr>
     <tr valign=top>
-     <th align=left>Researched:</td><td colspan=2>C, D, Dart, Elixir, Go, Julia, Kotlin, OCaml, Perl5, PHP, R, Racket, Ruby, Swift, Zig</td>
+     <th align=left>Researched:</th><td colspan=2>C, D, Dart, Elixir, Go, Julia, Kotlin, OCaml, Perl5, PHP, R, Racket, Ruby, Swift, Zig</td>
     </tr>
    </table>
 
   </section>
 
   <section class="comment">
+   <p>I've said things like "translates to all the languages."</p>
+   <p>Here's the list of languages we support today, and the list that we've done some prep work for.</p>
+   <p>One kind of cool thing: we have an opportunity to do dual-mode libraries: translate to Python, but implement compute intensive functions in C++ so if you import into Python, and it can use native functions, it links them in.  Otherwise it falls back to the pure Python version.</p>
+   <p>There's a similar story for JS and Wasm.</p>
   </section>
 
   <section class="slide" id="state-of-project-3">
@@ -1098,22 +1174,31 @@ class ByteBuffer { // JavaScript/TypeScript
   </section>
 
   <section class="comment">
+   <p>Programming languages go through stages.</p>
+   <p>We're in the early adopter stage.</p>
+   <p>We've got the language functional.  It's usable today, but we are reworking some significant parts, like the type system, in significant ways based on what we learned.  Most of those changes should not affect backwards compat, but we're taking the opportunity to make sweeping changes now.</p>
+   <p>And we're still working on things like, how do we store information about compilations so we can do less work on incremental compilations.</p>
+   <p>And we've got plans for a library repository, like pypi but for Temper.</p>
   </section>
 
   <section class="slide" id="state-of-project-4">
    <h2>State of the Temper Project</h2>
 
    <p style="font-size:225%">Can make breaking changes now!</p>
+   <p>Interested? &rarr; W3C interest group</p>
   </section>
 
   <section class="comment">
+   <p>So we can make breaking changes now.</p>
+   <p>If you need something from us to make Temper an awesome language for supporting standards work, let us know.</p>
+   <p>If you'd like to be part of an interest group, I'd love to chat.</p>
   </section>
 
   <section class="slide cover clear" id="end-cover">
    <h1>Lightweight Standards</h1>
    <h2 style="font-size: 80%">by deriving reference implementations for many programming languages</h2>
    <address>Mike Samuel<br><small>Chief Language Designer, Temper</small>
-   <br><small><tt>mikesamuel@gmail.com</tt> / <tt>@mvsamuel.bsky.social</tt></small></address>
+   <br><small><tt>mikesamuel@gmail.com</tt> / <tt>@mvsamuel.bsky.social</tt></small><br><small><tt>temperlang.github.io/tld/</tt></small></address>
    <p class=event>TPAC 2025<br>
      Kobe, Japan &amp; online<br>
      10–14 November 2025</p>
