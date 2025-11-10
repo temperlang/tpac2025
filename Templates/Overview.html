@@ -89,17 +89,18 @@
 
   <section class="slide" id="main-question">
    <h2 class="one-idea">How would being able to deliver a library to every programming language community help?</h2>
+
+   <h3>(Interest in W3C interest group?)</h3>
   </section>
   <section class="comment">
    <p>The main question I hope to address:
     I've got a programming language that translates to all the others.
     You can write a library and get a JavaScript library, and another for Python, and another for C#.
    </p>
-   <p>
-    How might it help the process of delivering standards?
-    How might it help developers downstream of the standards?
-    How might it help the tool ecosystems that arise around standards?
-    How might it help smooth work between W3C groups?</p>
+   <p>How might it help the process of delivering standards?</p>
+   <p>How might it help developers downstream of the standards?</p>
+   <p>How might it help the tool ecosystems that arise around standards?</p>
+   <p>How might it help smooth work between W3C groups?</p>
   </section>
 
   <section class="slide" id="not-ai">
@@ -108,8 +109,8 @@
 
   <section class="comment">
    <p>And just to get something out of the way early.  This is not an
-   AI talk.  People hear "code translation" and they think AI, LLMs.
-   If you like AI talks, that's cool, but I do compilers.</p>
+    AI talk.  If you like AI talks, that's cool, but everything
+    I'm talking about here is done with compiler methods.</p>
   </section>
 
   <section class="slide cut-in" id="about-me">
@@ -126,31 +127,32 @@
   </section>
 
   <section class=comment>
-   <p>First a bit about me.  If you're focused on I18N, the web stack,
-   security, distributed systems, or developer tools; I probably have
-   enough practical experience for us to have productive
-   discussions.<p>
+   <p>First a bit about me.<p>
 
    <p>My primary focus is programming languages, developer tools,
-   helping developers make better, more reliable systems. Especially
-   today's multi-language, distributed systems.</p>
+    helping developers make better, more reliable systems.</p>
 
-   <p>My introduction to the web was Google Calendar. Google's second
-   or third big, JavaScript heavy web application. I wrote large
-   chunks of the first frontend. And I was calendar's first
-   internationalization lead during Google's internal forty languages
-   initiative.</p>
+   <p>I started in languages about 30 years ago.</p>
+
+   <p>I've done web stack stuff, notably on Google Calendar.  An early
+    JavaScript heavy web application. I wrote large chunks of the
+    first frontend. And I was the first I18N/L10N lead during Google's
+    internal forty languages initiative.</p>
 
    <p>I've done standards work before: Calconnect briefly, TC39 for a
-   long time.  Most recently, in W3 I edited an early version of the
+   long time.  Most recently, in W3C I edited an early version of the
    trusted types spec.</p>
 
-   <p>And I spent a decade in security engineering. I am not a
-   cryptographer. I come at security from the perspective of how
-   better tools, for example, XSS-safe template languages, help
-    developers produce more secure systems.</p>
+   <p>And I spent over a decade in security engineering. I was one of
+    the non-cryptographers; I approached security from the perspective
+    of how better tools, for example, XSS-safe template languages,
+    help developers produce more secure systems.</p>
 
-   <p>And now, I am the </p>
+   <p>And now, I am the language designer for Temper Systems.</p>
+
+   <p>If you're focused on I18N, the web stack, security, distributed
+    systems, or developer tools; I can probably relate to some of the
+    challenges you deal with day to day.</p>
   </section>
 
   <section class="slide" id="signpost-1">
@@ -166,20 +168,22 @@
   </section>
 
   <section class=comment>
-   <p>I want this talk to be interactive. I'll set the stage with some
-   background and demos.<p>
+   <p>I want this talk to be interactive. I've prepared some background and
+    demos to set the stage.<p>
 
    <p>Then I'd like you all to drive the discussion.
-    How can we deliver a language that is good for developers and good for
-    standards maintainers?</p>
+    What would you do if you do differently if you could deliver
+    libraries to every language community?</p>
 
    <p>If you all are intersted in programming language design,
-   I have prepared some remarks on what makes Temper different.</p>
+    I have prepared some remarks on what you do differently if you want
+    high-fidelity translation.</p>
 
    <p>Finally, I can give an overview of the state of the project.
-   You can use it today. But you'll be an early language adopter.
-   If this sounds useful to you, we, the Temper team, can mitigat
-   some early-language adopter pains or even pitch in on a pilot.<p>
+   You can use it today. But being an early language adopter comes
+   with challenges.  If this sounds useful to you, we, the Temper
+   team, can mitigate some early-language adopter pains or even help out
+   with implementation work.<p>
   </section>
 
   <section class="slide cut-in" id="temper-nutshell">
@@ -196,7 +200,13 @@
   </section>
 
   <section class=comment>
-   <p></p>
+   <p>Most programming languages run in one or a few runtimes.  For example, Java on the JVM.</p>
+   <p>Temper is designed to translate well, so it runs in all the runtimes.</p>
+   <p>Again, not an AI talk.</p>
+   <p>Our focus is on libraries that support programs.  A person who understands a problem really well should be able to solve it by writing a library that supports every PL community.</p>
+   <p>Our target audience is everyday programmers.  The language looks superficially like TypeScript so it's easily recognized.</p>
+   <p>And we work by translation. There's no virtual machine barrier.  When you define a class in Temper, and use the Python translation, it's just Python classes and objects all the way down.</p>
+   <p>And a goal is to support standards efforts.  Both W3C style and smaller efforts inside organizations; anything that smooths collaboration between subject matter experts and implementors.</p>
   </section>
 
   <section class="slide side" id="language-islands">
@@ -214,10 +224,38 @@
 
   <section class=comment>
    <p>Here's a diagram from Stackoverflow's 2020 developer survey.</p>
-   <p>Developers use the right tool for the job.</p>
-   <p>That's great, but it comes at a cost: it's impossible to share code or type definitions between Python and Kotlin, for example.</p>
+   <p>We've got a <i>lot</i> of technology stacks; a lot of programming languages.</p>
+   <p>Developers can choose the right tool for the job.</p>
+   <p>(The blue labels are mine) You can see here that data scientists cluster at the top: Python, TensorFlow.</p>
+   <p>They use different stacks than mobile app devs on the right: Kotlin, Swift, Dart</p>
+   <p>The web platform which we all know and love is at the bottom.</p>
+   <p>And backend developers tend to use a typed language like C# or Java.</p>
+   <p>That's great, but it comes at a cost: language islands.</p>
+   <p>It's impossible to share code or type definitions between Python and Kotlin, for example.</p>
+  </section>
+
+  <section class="slide cut-in" id="language-island-costs">
+   <h2>Costs of language islands</h2>
+   <ul class="quick">
+    <li class="next">Duplication</li>
+    <li class="next">Unnecessary asyncrony</li>
+    <li class="next">Multiple, poorly tested, inconsistent, partial reimplementations of the same idea </li>
+    <li class="next">Difficult static analysis</li>
+   </ul>
+   <p class="next">What we need, a new way of sharing:</p>
+   <p class="next">Single source of truth, ubiquitous libraries.</p>
+  </section>
+
+  <section class="comment">
+   <p>This leads to a number of problems.</p>
+   <p>The same code gets written in multiple languages</p>
+   <p>Or you use a micro-service; sometimes that's appropriate. But if you're using a micro-service because you want to share logic, you've just added network delay, and a point of failure.</p>
+   <p>In practice, the inability to share across language boundaries leads to multiple implementations.  But not every language needs the whole thing, and why would you port tests for parts you don't need.  You end up with multiple, poorly tested, inconsistent, partial implementations.</p>
+   <p>And because there's no shared definitions, static anlyzers, code quality tools, can only look at one node in one language. Analyses stop at the island shore.</p>
    <p>Temper enables a new mode of sharing, type definitions and logic, whole libraries, among every node in a multi-language system.</p>
    <p>A developer using Temper can solve a problem for every programming language communities.</p>
+   <p>Focus effort on one implementation, one source of truth.  Amortize testing and documentation across all the language communities.</p>
+   <p>And from the engineering management side: an alternative to "every teams own a service in production", is "some teams own a library or standard that supports many other teams"</p>
   </section>
 
   <section class="slide lightmode" id="guardrails-across-network-gaps">
@@ -233,6 +271,9 @@
    between Java and JavaScript by translation, but the two also share logic,
    encoders for values to and from JSON. And by sharing a computed property
    definition, your wire format becomes concise.</p>
+
+   <p>And going back to static analysis.  And now static analyzers have
+    common points of reference.</p>
   </section>
 
   <section class="slide" id="signpost-2">
@@ -248,24 +289,26 @@
   </section>
 
   <section class=comment>
-   <p>So that's the project goals. Next up, demos.</p>
+   <p>So that's the motivation and project goals. Next up, demos.</p>
   </section>
 
   <section class="slide" id="demos-demos-demos">
    <h2>Demos</h2>
-   <ul>
-    <li>Currency: ISO 4217 - A literate specification with types, logic, and tests.</li>
-    <li>CSS-color-4 - Can deriving libraries from specs help devs and the dev-tools ecosystem?</li>
-    <li>JSON {,un}parsing - Better interop via a partial reference implementation</li>
+   <h3>Currency (ISO 4217)</h3>
+   <p>A literate specification with types, logic, and tests.</p>
+   <h3>CSS-color-4</h3>
+   <p>Can delivering libraries with specs help devs and the dev-tools ecosystem?</p>
+   <h3>JSON {,un}parsing</h3>
+   <p>Avoid interop problems via a partial reference implementation.</p>
   </section>
 
   <section class=comment>
    <p>I've got a few demos prepared. Depending on what interests people, I can skip around.</p>
-   <p>The first is a simple one. A literate standard that mixes prose, reference implemenation code, and tests. I want you to see what it's like to use the language, and what the reference implementation looks like.</p>
+   <p>The first is a simple one. A literate standard that mixes prose, reference implemenation code, and tests. I want to show what it's like to use the language, and what the reference implementation looks like.</p>
 
    <p>The second, CSS colors. Browsers care about CSS colors, but so do graphic designer tools. I was hoping to frame discussion about how a standard could encourage a rich tool ecosystem by by making colorspace logic ubiquitous.</p>
 
-   <p>Third, the JSON standard. There are a lot of parsing corner cases that cause interop problems. Could those have been avoided if just part of the specification were ubiquitously available?</p>
+   <p>Third, the JSON standard. There are a lot of parsing corner cases that cause interop problems. JSON Could those have been avoided if just part of the specification were ubiquitously available?</p>
   </section>
 
   <section class="slide side" id="iso-4217">
@@ -279,10 +322,39 @@
    <p>Literate Temper code in Markdown</p>
 
    <p>Prose intermixed with type definitions, logic, and tests</p>
+
+   <p>Using the playground to see libraries from target language users' points of view.</p>
   </section>
 
   <section class=comment>
-   <p>TODO: demo script</p>
+   <p>Demo script:</p>
+   <p>Show price.temper.md in VSCode.  Note the narrative structure: prose explains what and why; library code captures how; and test code captures examples.</p>
+   <p>Open up <code>temper repl -b py</code> and show creating a value from Python and encoding it to JSON.</p>
+   <p>Switch to <code>temper repl -b java</code> and show unpacking a value and how it's just a regular Java class.</p>
+  </section>
+
+    <section class="slide side" id="iso-4217-takeaways">
+   <h2>Currency type as a Library</h2>
+
+   <figure class="side">
+    <a href="vscode-price-temper.png"><img src="vscode-price-temper.png" alt="Screenshot of VSCode with a source file loaded of markdown titled &quot;Prices&quot; and with source code interleaved with specification text"></a>
+    <caption>VSCode with price.temper.md</caption>
+   </figure>
+
+   <p>Single source of truth for SMEs and implementors.</p>
+
+   <p>Devs end up with a library.</p>
+
+   <p>Every PL community gets supporting libraries and can exchange
+   values with others; islands bridged.</p>
+  </section>
+
+  <section class=comment>
+   <p>Here's what I hope you noticed:</p>
+   <p>In a standards document, we explained things in prose, so it's accessible to subject matter experts.  Embedded code captures how computation is done, and tests.</p>
+   <p>One thing to note: tests are pretty formulaic, so subject matter experts should be able to capture some requirements, as they figure things out, as tests, possibly with AI assistance, and hand them off to implementors.</p>
+   <p>At the end of the standards drafting process, in normal standards process, that's when the hard work for implementors starts.  But in this case, you've got a well-tested reference implementation ready.</p>
+   <p>With Temper, you deliver high quality support to devs and bridge those language community islands.</p>
   </section>
 
   <section class="slide side" id="demo-prismora">
@@ -305,7 +377,7 @@
   </section>
 
   <section class=comment>
-   <p>TODO: demo script</p>
+   <p>TODO: demo script, takeaways</p>
   </section>
 
   <section class="slide side" id="json-minefield">
@@ -318,52 +390,51 @@
 
    <p>Lots of interop problems around parsing</p>
 
-   <p>What resulted: a de facto, undocumented standard for a "safe" subset&<sup>dagger;</sup> of JSON syntax.</p>
+   <p>What resulted: an undocumented de facto standard for a "safe" subset<sup>&dagger;</sup> of JSON syntax.</p>
 
-   <p>A partial reference implementation of JSON, just a canonical event-driven parsers&amp;unparser implementation, could have avoided this.</p>
+   <p>With Temper, this could have been avoided.</p>
 
    <p><small>&dagger; superset of a subset</small></p>
   </section>
 
   <section class=comment>
-   <p>Some of you have probably seen this famous writeup on JSON parsing.</p>
-   <p>That's a test result matrix. Each row has a snippets of JSON, some invalid.</p>
+   <p>Parsing JSON is a minefield.</p>
+   <p>I did a bunch of work on JSON security starting around 2008, so this hits me hard.</p>
+   <p>That image is a test result matrix. Each row has a snippet of JSON, some invalid.</p>
    <p>Each column is a JSON parsing library.</p>
-   <p>I did a bunch of work on JSON security around 2008.</p>
    <p>The whole point of a format like JSON is, two programs, often in different languages,
    agree on the format, and then they can communicate.</p>
-   <p>But there's not much agreement as you can see.</p>
+   <p>But there's a lot of disagreement, a lot of parsing corner cases.  There're reasons for that.</p>
    <ul>
     <li>Writing efficient parsers <em>is</em> just hard.</li>
     <li>UTF-8 and UTF-16 internal string representations lead to different corner cases</li>
     <li>Different Postel's law stances</li>
    </ul>
-   <p>This all could have been avoided if the <i>json.org</i> and later ECMA-404 had the
-   tools to provide a partial implementation of the JSON parsing algorithm.</p>
+   <p>This all could have been avoided if the <i>json.org</i>, RFC 8259, and later ECMA-404 had the tools to provide a partial implementation of the JSON parsing algorithm.</p>
   </section>
 
   <section class="slide" id="demo-json-interop">
-   <h2>Demo: just enough of a JSON reference implementation for interop</h2>
+   <h2>Demo: partial implementation of JSON for interop</h2>
 
-   <p>JSON does not assign limits or semantics to numbers / strings.</p>
+   <p>Problem: JSON agnostic to number/string representation, value semantics.</p>
 
-   <p><code>[1,2]</code> could be a point in some contexts, a list of ints, or big decimals.</p>
+   <p><code>[1,2]</code> could specify a list of 32b ints, or big decimals, or a 2-D point, &hellip;</p>
 
-   <p><big>Could a ubiquitous, partial reference implementation of JSON have side-stepped interop issues?</big></p>
+   <p><big>Can we implement enough JSON once to solve interop but remain value-semantics agnostic?</big></p>
   </section>
 
   <section class=comment>
    <p>JSON is an interop format. It has numbers and strings, but it doesn't say what they mean, nor should it.</p>
    <p>And the relationship between JSON sub-expressions and values is incredibly context dependent.</p>
-   <p>If Temper were available when JSON was first drafted, could we have dodged both the incredible number of subtle parsing interop issues without mandating a lot of detail?</p>
+   <p>If Temper were available when JSON was first drafted, could we have dodged both the incredible number of subtle parsing interop issues without mandating value-semantics?</p>
   </section>
 
-  <section class="slide" id="event-driven-parsing">Event driven parsing<img src="parsing-with-event-streams.png" alt="A sequence of three labeled diagrams. First label 'Source Text' above code '[1, 2, 3]'. Second label 'Abstract Syntax Tree' above one box labeled 'Array' that fans out to three boxes below labeled 'Number(1)', 'Number(2)', 'Number(3)'. Third and last diagram, 'Flattened Tree / Event Stream', above 'startArray, number(1), number(2), number(3), endArray'.  From the Array box in the middle diagram, two dashed arrows fan out to the 'startArray' and to the 'endArray' events.  One dashed arrow goes from the 'Number(1)' box in the second diagram to the corresponding 'number(1)' text in the third.  There are two labels to the right of the second diagram: 'Inner Nodes' lining up with the 'Array' box and 'Leaf Nodes' lining up with the 'Number(...)' boxes." width=431 height=257></section>
+  <section class="slide" id="event-driven-parsing"><h2 style="font-size: 100%">Event driven parsing</h2><img src="parsing-with-event-streams.png" alt="A sequence of three labeled diagrams. First label 'Source Text' above code '[1, 2, 3]'. Second label 'Abstract Syntax Tree' above one box labeled 'Array' that fans out to three boxes below labeled 'Number(1)', 'Number(2)', 'Number(3)'. Third and last diagram, 'Flattened Tree / Event Stream', above 'startArray, number(1), number(2), number(3), endArray'.  From the Array box in the middle diagram, two dashed arrows fan out to the 'startArray' and to the 'endArray' events.  One dashed arrow goes from the 'Number(1)' box in the second diagram to the corresponding 'number(1)' text in the third.  There are two labels to the right of the second diagram: 'Inner Nodes' lining up with the 'Array' box and 'Leaf Nodes' lining up with the 'Number(...)' boxes." width=431 height=257></section>
 
   <section class=comment>
-   <p>Event-driven parsing allows representing both parsing and unparsing operations as a stream of events.  It's kind of like flattening an abstract syntax tree to a list: each inner node becomes a tagged start and end node, and content lives at leaf ndoes.  But because each event is just a method call, it's flexible and performant.</p>
-
-   <p>It allows a very clean separation between structure and semantics, and as you can see here, you can have a value-agnostic parser produce the stream, and an actual unparser can consume the event stream.</p>
+   <p>In security engineering, I was known as someone who does strange things with parsers.</p>
+   <p>Event-driven parsing is a useful trick.</p>
+   <p>Event-driven parsing allows representing both parsing and unparsing operations as a stream of events.  Conceptually, it involves flattening an abstract syntax tree to a list: each inner node becomes a tagged start and end node, and content lives at leaf ndoes.  But because each event is just a method call, it's flexible and performant.</p>
   </section>
 
   <section class="slide" id="json-interop-pipelines">
@@ -373,6 +444,8 @@
   </section>
 
   <section class=comment>
+   <p>Event-driven parsing allows a very clean separation between structure and semantics, and as you can see here, you can have a value-agnostic parser produce the stream, and an actual unparser can consume the event stream.</p>
+
    <p>How does that simplify parsing and unparsing?</p>
 
    <p>As can be seen on the left, we can have a generic JSON parser, one
@@ -387,31 +460,33 @@
   </section>
 
   <section class="slide" id="json-wrapup">
-   <p>Maybe a full reference implementation is impractical.</p>
+   <h2>JSON demo takeaways</h2>
 
-   <p>Focus on partial implementations to encourage interop, consistency.</p>
+   <p>Sometimes a full reference implementation is impractical.</p>
+
+   <p>Partial implementations can achieve specific goals:<br>e.g. interoperability, buffer-overflow/eval safety.</p>
 
    <p>Be opinionated where helpful, agnostic where not.</p>
 
-   <p>Look for interface design strategies that separate concerns.</p>
+   <p>Often, there are library design strategies that separate concerns.</p>
   </section>
 
   <section class=comment>
-   <p>The takeaway from this JSON example: you don't need a full implementation to provide value.</p>
-
-   <p>The community using the standard benefits from consistency.  Let's focus there.</p>
+   <p>The takeaway from this JSON example: you don't need a full implementation to provide a lot of value.</p>
 
    <p>There may be good reasons not to do a full reference implementation.
    But often there are strategies to be opinionated where it helps and agnostic where it doesn't.</p>
+
+   <p>In this case, the community would have benefitted from consistency in string processing; once we identified that need, the design flowed naturally from that.</p>
   </section>
 
   <section class="slide" id="greasy-skids">
-   <p>Greasing the skids between working groups</p>
+   <h2>Greasing the skids between working groups</h2>
 
    <p>Different audiences for libraries:</p>
    <ul>
-    <li>Everyday developers, e.g. Price types</li>
-    <li>Browser, tools developers, e.g. Colors</li>
+    <li>Everyday developers, e.g. currency types</li>
+    <li>Browser, tools developers, e.g. color computations</li>
     <li>Library & framework authors, e.g. JSON {,un}parsing support</li>
     <li><b>Other working groups?</b></li>
    </ul>
@@ -421,10 +496,14 @@
    <p>I showed you three demos.</p>
    <p>I want to spur ideas on how the Temper language can help standards
     folk in their work, and the developers and software downstream.</p>
-   <p>But I also think there's opportunity for you to help each other.
+   <p>The thread tying these demos together, each looks at supporting
+    a different group of contributors.</p>
+   <p>Everyday developers, browser&amp;tools developers, or framework authors.</p>
+   <p>But I also think there's an opportunity for you to help each other.
     If some other W3C group has questions about what you're doing and
     how it affects them, giving them a reference implementation that works
     in the languages they use might help.</p>
+   <p>You all would probably understand better than me, where that'd be.</p>
   </section>
 
   <section class="slide" id="signpost-3">
@@ -439,7 +518,10 @@
    <p style="font-size: 110%">State of the Project</p>
   </section>
 
-  <section class="comment"></section>
+  <section class="comment">
+   <p>I'm here representing the Temper contributors, and would love to know what we can do for you, and I can make committments of aid.</p>
+   <p>So opening this up, how this might help you in your work?</p>
+  </section>
 
   <section class="slide" id="signpost-4">
    <p style="font-size: 110%">Why a translating language?</p>
@@ -459,9 +541,11 @@
   </section>
 
   <section class="slide" id="design-for-translation">
+   <h2>Multi-backend programming languages</h2>
+
    <p>
-    There are many multi-backend languages run in
-    their runtime, and JavaScript runtimes:  Scala, OCaml, Dart, Kotlin.
+    Many multi-backend languages run in their runtime, and JavaScript runtimes:
+    Scala, OCaml, Dart, Kotlin.
    </p>
 
    <p>But not Python</p>
@@ -469,8 +553,8 @@
    <p>Scala tried and abandoned .NET support</p>
 
    <p>
-    Temper: a language without a runtime; designed to translate
-    well requires specific choices.  For example: &hellip;
+    Temper: a language without a runtime.
+    <br>Designing to translate well requires specific choices: &hellip;
    </p>
   </section>
 
@@ -484,7 +568,9 @@
    <p>Scala runs in the Java VM. C# is very similar in many ways,
     but not close enough for Scala to be able to run in a .NET runtime
     despite significant effort.</p>
-   <p>Next, I'd like to introduce a series of glimpses into the design space.</p>
+   <p>Temper is a language without a runtime; it works by translation
+    into other languages so works in many runtimes.</p>
+   <p>Next, I'd like to give you glimpses into the design space.</p>
   </section>
 
   <section class="slide" id="complicators-1a">
@@ -494,7 +580,7 @@
 
    <p><blockquote>
     Now is the winter of our discontent
-    <br>Made glorious summer by this <b>sun of York</b>;
+    <br>Made glorious summer by this <u>sun of York</u>
     <br>- Shakespeare
    </blockquote></p>
 
@@ -522,23 +608,24 @@
 
    <p>That pun won't translate easily to languages where the
    correpsonding words don't sound the same, for example the French
-   fil et sol don't.</p>
+   fils et soleil don't.</p>
   </section>
 
   <section class="slide" id="complicators-1b">
    <h2>What complicates translation?</h2>
 
-   <pre><code>// Java
+   <img alt="// Java
 String encodeJson(Object o) {
    if (o instanceof Integer) {
        return String.format("&percnt;d", ((Integer) o));
    } else if (o instanceof Boolean) {
        return ((Boolean) o) ? "true" : "false";
    } else &hellip;
-}</code></pre>
+}" src="code-sample-java-encodejson.png">
 
-   <p>In Java, no <i>Boolean</i> is an <i>Integer</i>.
-    In Python, every <i>bool</i> is an <i>int</i>.</p>
+   <p>Embedded assumption:
+    <br>In Java, no <i>Boolean</i> is an <i>Integer</i>.
+    But in Python, every <i>bool</i> is an <i>int</i>.</p>
   </section>
 
   <section class=comment>
@@ -559,12 +646,14 @@ String encodeJson(Object o) {
   <section class="slide" id="complicators-2a">
    <h2>What complicates translation?</h2>
 
-   <h3>What must you specify?</h3>
+   <h3>What must you specify? <small>(à la RFC 2119)</small></h3>
 
-   <p>In English, you may include honorifics: "<i>Mr.</i> Fred Rogers," or you can omit them: "Fred Rogers."</p>
-   <!-- TODO: Is Fred, Mr. Roger's first name, or Frank? -->
+   <p>In English, you may include honorifics: "<i>Mr.</i> Fred Rogers,"
+    or you can omit them: "Fred Rogers."</p>
 
-   <p>In Japanese, honorifics are required in normal speech, e.g. <i>san</i> following an adult's name.</p>
+   <p>In idiomatic Japanese, you must include honorifics, e.g. <i>-san</i>.
+
+   <p>In English, you must specify a subject: "<u>It</u> is windy."</p>
 
    <p>A translator must synthesize missing, required elements.</p>
   </section>
@@ -574,6 +663,7 @@ String encodeJson(Object o) {
    in some, you have to express certain other things.</p>
    <p>For example, in English, you can specify honorifics: Mister or Mrs.  Often you don't.</p>
    <p>In Japanese, it's unidiomatic to leave them out.</p>
+   <p>And in English some things, subjects and articles, are required.</p>
    <p>A translator must synthesize missing, required elements. In the case of honorifics, this might require researching the relative status of the speaker and the addressee.</p>
   </section>
 
@@ -582,20 +672,20 @@ String encodeJson(Object o) {
 
    <p>In Java, you may specify optionality:</p>
 
-   <pre><code>String numberToString(int num, <u>@Nullable</u> Integer radix)&hellip;</code></pre>
+   <img alt="Pretty printed code.  Nullable is highlighted.  Text follows: String numberToString(int num, @Nullable Integer radix)&hellip;" src="code-sample-java-numtostr.png">
 
    <p>In Rust, you must:</p>
 
-   <pre><code>fn numberToString(num: i32, radix: <u>option</u>&lt;i32&gt;) -> &hellip;</code></pre>
+   <img alt="Pretty printed code.  option is highligted.  Text follows: fn numberToString(num: i32, radix: option&lt;i32&gt;) -> &hellip;" src="code-sample-rust-numtostr.png">
   </section>
 
   <section class="comment">
    <p>This shows up in code.  In Java, you can specify whether an input is optional; whether you can pass in null if you don't care.  In Rust, you must.  There is no null singleton so you need to use an option type.</p>
   </section>
 
-  <section class="slide" id="complicators-3">
+  <section class="slide" id="complicators-3a">
    <h2>What complicates translation?</h2>
-   <h3>Same idea, but also different</h3>
+   <h3>Same idea, but different</h3>
 
    <table>
     <tr><th align=left width=40%>German</th><th align=left width=40%>English</th></tr>
@@ -606,12 +696,28 @@ String encodeJson(Object o) {
    <p>Geist can often translate to ghost.
    <br>But you can't say the "ghost of the times" in English.
    "Spirit" can mean essence, but "ghost" conveys disembodied-ness.</p>
-
-   <p>Strings!</p>
   </section>
 
   <section class="comment">
-   <p></p>
+   <p>Sometimes, there's a really good translation for a term.  English Ghost and German Geist are cognates.</p>
+   <p>When you translate Zeitgeist from German into English, you need to use English's Romance-language borrow Spirit instead because Ghost has additional connotations beyond the German Geist, namely that a ghost is a disembodied spirit.</p>
+  </section>
+
+  <section class="slide" id="complicators-3b">
+   <h2>What complicates translation?</h2>
+   <h3>Same idea, but different</h3>
+
+   <p>Python: <img alt="'\uD800' in '\U00010000'" src="code-sample-py-strinstr.png"></p>
+
+   <p>JavaScript: <img alt="'\u{10000}'.indexOf('\uD800') >= 0" src="code-sample-js-strinstr.png"></p>
+  </section>
+
+  <section class="comment">
+   <p>Does one string contain another as a substring?</p>
+   <p>Strings are a workhorse type.  They should have the same semantics across languages.</p>
+   <p>They do not. OMFG they do not.  Because variable-length encodings.</p>
+   <p>Here's an example of checking whether a surrogate is a substring of a supplemental codepoint.</p>
+   <p>We put a lot of very careful work into getting efficient, reliable semantics for strings in a way that's familiar to developers.</p>
   </section>
 
   <section class="slide" id="complicators-4">
@@ -626,12 +732,23 @@ String encodeJson(Object o) {
 
   <section class="comment">
    <p>Finally, ad-hoc types.</p>
-   <p>Yes, we computer scientists have come up with problems linguists can't even imagine.</p>
+   <p>Yes, we computer scientists have come up with problems that would shock professional linguists.  Go us!</p>
    <p>In nominal types, for two types to match, they must be defined in the same place.</p>
    <p>But ad-hoc types, combine other types.  If those other types are combined in the same way, they match.</p>
    <p>Strangely ad-hoc types break dependency management.</p>
    <p>It's hard to translate ad-hoc types to nominal type systems: where do you put the translation if the same ad-hoc type is used from multiple modules that are co-referenced by a third that needs them to match?</p>
    <p>Value identity
+  </section>
+
+  <section class="slide" id="complicators-5">
+   <h2>Ad-hoc types</h2>
+   <img src="ad-hoc-diamond-problem.png" alt="graph of nodes in a diamond arrangement with arrows flowing from top to bottom.  Top of diamond labeled 'gives an X from B to C', middle two nodes labels are 'B uses X' and 'C uses X'. Bottom node label is 'A defines type X'." width=281 height=249>
+  </section>
+
+  <section class="comment">
+   <p>Ad-hoc types introduce the following problem when you need to translate to a language that does not have ad-hoc types.</p>
+   <p>The problem is this.  In a nominally typed language, every type is declared somewhere.  The bottom node, A, declares a type.  Then B and C both import and use that declaration.  That means D can use B and C together.</p>
+   <p>With an ad-hoc type, there may be no A to which the separate translations of B and C refer. This is a problem for translating D to use both.</p>
   </section>
 
   <section class="slide" id="design-choice-nullity">
@@ -647,6 +764,14 @@ String encodeJson(Object o) {
   </section>
 
   <section class="comment">
+   <p>Moving to specific design decisions:</p>
+   <p>Null, everyone's favorite billion dollar problem.</p>
+   <p>Actually the problem was unchecked null, something we avoid.</p>
+   <p>Programmers need some way to represent optional inputs, unavailable outputs, and often intermediate values that are not yet available.</p>
+   <p>There are two main approaches to that in modern languages: null and option types</p>
+   <p>These two are not equivalent, because the singleton null hides an ambiguity.</p>
+   <p>We have to interoperate with both languages, so Temper has a null singleton, but type checked.  And we do some additional static checks that affect type polymorphic code, so that it's impossible to write Temper code that trips over that ambiguity.</p>
+   <p>Just an example of the kind of thing that trips up languages that define semantics for their runtime, and then try to expand outside it.  But we planned ahead.</p>
   </section>
 
   <section class="slide" id="design-choice-failure">
@@ -663,16 +788,25 @@ String encodeJson(Object o) {
   </section>
 
   <section class="comment">
+   <p>Error handling. If a function realizes it's not going to be able to produce a usable result.  For example, it's parsing a number but the string is malformed or a file is unreadable.  When that happens it needs to hand control to code that can try to recover or try a different strategy.</p>
+   <p>Exceptions are a common way to do that in modern languages.</p>
+   <p>But if you're familiar with Rust or Go or OCaml, then you're familiar with Result types.</p>
+   <p>Error handling is super important.  If you don't support a language's preferred way of handling errors, then you're failing users who are working within that paradigm to write reliable code.</p>
+   <p>Result types are a principled approach to error handling.  It turns out that if you don't treat them as first class, then you can provide good support both to languages that have them and to languages that use exceptions.</p>
   </section>
 
   <section class="slide" id="design-choice-generic-operations">
    <h2>Generic Operations</h2>
 
-   <p>Goal: Consistent semantics for basic operations like equality,
-    comparison (<code>2 < 11 && "2" > "11"</code>), stringification (<code>"${1.0}" == "1.0"</code>), which distribute through objects (<code>"${ [0, 1] }" != "${ [false, true] }"</code>).</p>
+   <p>Goal: Consistent semantics for basic operations</p>
+   <table><tr><th>comparison<td><code>2 < 11 && "2" > "11"</code></tr>
+    <tr><th>stringification<td><code>"${1.0}" == "1.0"</code></tr>
+   </table>
+   <p>These should distribute through generic containers:
+    <br><code>"${ [0, 1] }" != "${ [false, true] }"</code></p>
    <p>Complicator: Some languages (e.g. Perl, PHP, JavaScript) do not distinguish between all of <i>int</i>s, <i>float</i>s, <i>boolean</i>s, <i>strings</i>. <code>0</code> can mean different things.</p>
-   <p>Complicator: To connect multiple Temper types to one target language types, we cannot rely on RTTI.</p>
-   <p>Solution: Type reification that desugars but which provides just enough trait-like behaviour.</p>
+   <p>Complicator: Need to connect multiple Temper types to one target language types, prevents RTTI.</p>
+   <p>Solution: Type reification that desugars provides just enough trait-like behaviour.</p>
   </section>
 
   <section class="comment">
