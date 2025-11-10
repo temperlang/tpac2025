@@ -113,51 +113,53 @@
   </section>
 
   <section class="comment">
-   <p>And just to get something out of the way early.  This is not an
+   <p>Just to get something out of the way early.  This is not an
     AI talk.  If you like AI talks, that's cool, but everything
     I'm talking about here is done with compiler methods.</p>
   </section>
 
   <section class="slide cut-in" id="about-me">
-   <h2>Obligatory about me</h2>
+   <h2 style="font-size:100%">About me, presenting on behalf of the Temper team</h2>
    <ul class="quick">
     <li class="next">1990s, CMU Field Robotics: Programming languages for robotic systems</li>
-    <li class="next">17 years at Google: First frontender Google Calendar, eng <u>I18N</u> lead</li>
+    <li class="next">17 years at Google: First frontender Google Calendar, <u>I18N</u> lead</li>
     <li class="next">Briefly on Calconnect standards, longtime <u>TC39</u> (JavaScript) member</li>
-    <li class="next">Caja, object-capabilities PLs on web stack, early <u>web security</u> research</li>
+    <li class="next">Caja, object-capabilities PL on web stack, early <u>web security</u> research</li>
     <li class="next">PL approaches to <u>security engineering</u> including <u>secure HTML</u> composition</li>
-    <li class="next">Transferring sec-eng lessons to OSS stacks & dynlangs</li>
+    <li class="next">Transferred sec-eng lessons to OSS stacks & dynlangs</li>
     <li class="next">Now: Language Designer, Temper</li>
    </ul>
   </section>
 
-  <section class=comment>
-   <p>First a bit about me.<p>
+  <section class="comment">
+   <p>First, I'm here presenting the work of the Temper contributors.</p>
+   <p>But so you all know whom you're talking to.<p>
 
    <p>My primary focus is programming languages, developer tools,
     helping developers make better, more reliable systems.</p>
 
-   <p>I started in languages about 30 years ago.</p>
+   <p>I started in programming languages about 30 years ago at CMU's
+   field robotics center.</p>
 
-   <p>I've done web stack stuff, notably on Google Calendar.  An early
-    JavaScript heavy web application. I wrote large chunks of the
-    first frontend. And I was the first I18N/L10N lead during Google's
-    internal forty languages initiative.</p>
+   <p>I've done web stack stuff, notably on Google Calendar, an early
+   JavaScript heavy web application. I wrote large chunks of the
+   first frontend, and I was the internationalization lead during
+   Google's internal forty languages initiative.</p>
 
    <p>I've done standards work before: Calconnect briefly, TC39 for a
    long time.  Most recently, in W3C I edited an early version of the
    trusted types spec.</p>
 
    <p>And I spent over a decade in security engineering. I was one of
-    the non-cryptographers; I approached security from the perspective
-    of how better tools, for example, XSS-safe template languages,
-    help developers produce more secure systems.</p>
+   the non-cryptographers; I approached security from the perspective
+   of how better tools, for example, XSS-safe template languages,
+   help developers produce more secure systems.</p>
 
    <p>And now, I am the language designer for Temper Systems.</p>
 
-   <p>If you're focused on I18N, the web stack, security, distributed
-    systems, or developer tools; I can probably relate to some of the
-    challenges you deal with day to day.</p>
+   <p>So if you're here at TPAC focused on internationalization, the
+   web stack, security, distributed systems, or developer tools; I can
+   probably relate to some of the challenges you deal with.</p>
   </section>
 
   <section class="slide" id="signpost-1">
@@ -172,23 +174,23 @@
    <p style="font-size: 110%">State of the Project</p>
   </section>
 
-  <section class=comment>
-   <p>I want this talk to be interactive. I've prepared some background and
-    demos to set the stage.<p>
+  <section class="comment">
+   <p>I want this talk to be interactive. I've prepared some
+   background and demos to set the stage.<p>
 
    <p>Then I'd like you all to drive the discussion.
-    What would you do if you do differently if you could deliver
-    libraries to every language community?</p>
+   What would you do if you do differently if you could deliver
+   libraries to every language community?</p>
 
-   <p>If you all are intersted in programming language design,
-    I have prepared some remarks on what you do differently if you want
-    high-fidelity translation.</p>
+   <p>Then, if there's interest in programming language design, I have
+   prepared some remarks on what you do differently if you want
+   high-fidelity translation.</p>
 
    <p>Finally, I can give an overview of the state of the project.
    You can use it today. But being an early language adopter comes
    with challenges.  If this sounds useful to you, we, the Temper
-   team, can mitigate some early-language adopter pains or even help out
-   with implementation work.<p>
+   team, would love to work with you to mitigate early-language
+   adopter pains and can help out with implementation work.<p>
   </section>
 
   <section class="slide cut-in" id="temper-nutshell">
@@ -196,7 +198,6 @@
    <p>A programming language
    <ul class=quick>
     <li class="next">designed to translate well to all the others</li>
-    <li class="next">via compiler methods (not LLMs)</li>
     <li class="next">for making libraries usable by every PL community</li>
     <li class="next">usable by everyday programmers</li>
     <li class="next">by translation to the local language, no virtual machine barrier</li>
@@ -204,14 +205,22 @@
    </ul>
   </section>
 
-  <section class=comment>
-   <p>Most programming languages run in one or a few runtimes.  For example, Java on the JVM.</p>
-   <p>Temper is designed to translate well, so it runs in all the runtimes.</p>
-   <p>Again, not an AI talk.</p>
-   <p>Our focus is on libraries that support programs.  A person who understands a problem really well should be able to solve it by writing a library that supports every PL community.</p>
-   <p>Our target audience is everyday programmers.  The language looks superficially like TypeScript so it's easily recognized.</p>
-   <p>And we work by translation. There's no virtual machine barrier.  When you define a class in Temper, and use the Python translation, it's just Python classes and objects all the way down.</p>
-   <p>And a goal is to support standards efforts.  Both W3C style and smaller efforts inside organizations; anything that smooths collaboration between subject matter experts and implementors.</p>
+  <section class="comment">
+   <p>Most programming languages run in one or a few runtimes.  For
+   example, Java on the JVM.</p>
+   <p>Temper is designed to translate well; to run in all the runtimes.</p>
+   <p>Our focus is on libraries that support programs.  A person who
+   understands a problem really well should be able to solve it by
+   writing a library that supports every PL community.</p>
+   <p>Our target audience is everyday programmers.  The language looks
+   superficially like TypeScript so it's easily recognized.</p>
+   <p>And we work by translation. There's no virtual machine barrier.
+   When you define a class in Temper, and use the Python translation,
+   it's just Python classes and objects all the way down.</p>
+   <p>And its our goal to support standards efforts.  Both W3C style
+   and smaller efforts inside organizations; anything that smooths
+   collaboration between subject matter experts and software
+   practictioners.</p>
   </section>
 
   <section class="slide side" id="language-islands">
@@ -227,16 +236,19 @@
    <p>Microservices, stateful async functions, do not solve all problems.</p>
   </section>
 
-  <section class=comment>
+  <section class="comment">
+   <p>Let me explain the motivation for this project.</p>
    <p>Here's a diagram from Stackoverflow's 2020 developer survey.</p>
-   <p>We've got a <i>lot</i> of technology stacks; a lot of programming languages.</p>
-   <p>Developers can choose the right tool for the job.</p>
-   <p>(The blue labels are mine) You can see here that data scientists cluster at the top: Python, TensorFlow.</p>
-   <p>They use different stacks than mobile app devs on the right: Kotlin, Swift, Dart</p>
+   <p>We've got a <i>lot</i> of technology stacks; a lot of
+   programming languages and frameworks.</p>
+   <p>That's great!  Developers can choose the right tool for the job.</p>
+   <p>That's great, but it comes at a cost: disconnected language islands.</p>
+   <p>(The blue labels are mine) You can see here that data scientists
+   cluster at the top: Python, TensorFlow.</p>
+   <p>They use different stacks than mobile app devs on the right:
+   Kotlin, Swift, Dart</p>
    <p>The web platform which we all know and love is at the bottom.</p>
    <p>And backend developers tend to use a typed language like C# or Java.</p>
-   <p>That's great, but it comes at a cost: language islands.</p>
-   <p>It's impossible to share code or type definitions between Python and Kotlin, for example.</p>
   </section>
 
   <section class="slide cut-in" id="language-island-costs">
@@ -253,7 +265,7 @@
 
   <section class="comment">
    <p>This leads to a number of problems.</p>
-   <p>The same code gets written in multiple languages</p>
+   <p>The same code gets written in multiple languages.  An estimated 30% of engineering effort is wasted on this.</p>
    <p>Or you use a micro-service; sometimes that's appropriate. But if you're using a micro-service because you want to share logic, you've just added network delay, and a point of failure.</p>
    <p>In practice, the inability to share across language boundaries leads to multiple implementations.  But not every language needs the whole thing, and why would you port tests for parts you don't need.  You end up with multiple, poorly tested, inconsistent, partial implementations.</p>
    <p>And because there's no shared definitions, static anlyzers, code quality tools, can only look at one node in one language. Analyses stop at the island shore.</p>
@@ -263,6 +275,26 @@
    <p>And from the engineering management side: an alternative to "every teams own a service in production", is "some teams own a library or standard that supports many other teams"</p>
   </section>
 
+  <section class="slide" id="connections">
+   <h2 class="one-idea">Identify a common problem &rarr; express a common solution</h2>
+  </section>
+
+  <section class="comment">
+   <p>So maybe you're in one island and I'm on another.</p>
+   <p>If we realize we have a common problem, we should be able to express a common solution.</p>
+   <p>But that requires a language. My motivation for this project was make that language.</p>
+  </section>
+
+  <section class="slide" id="comprehensive-solutions">
+   <h2 class="one-idea">Understand a problem deeply? &rarr; Solve it for everyone</h2>
+  </section>
+
+  <section class="comment">
+   <p>I want deep thinkers to be able to solve problems for everyone.</p>
+   <p>Maybe you really understand a problem like HTML sanitization, taking untrusted HTML and turning it into trustworthy HTML.  If you write a solution in C#, you've solved it on one island.  But that doesn't help Lua users.</p>
+   <p>So Temper's value proposition is a bit different. This is not a language you use instead of other languages, you use it alongside.</p>
+  </section>
+
   <section class="slide lightmode" id="guardrails-across-network-gaps">
    <h2>Types Extended</h2>
    <figure>
@@ -270,7 +302,7 @@
    </figure>
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>If nodes can share type definitions, then you can extend a degree of
    type safety across network boundaries. Here, a class, Person, is shared
    between Java and JavaScript by translation, but the two also share logic,
@@ -293,7 +325,7 @@
    <p style="font-size: 110%">State of the Project</p>
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>So that's the motivation and project goals. Next up, demos.</p>
   </section>
 
@@ -307,7 +339,7 @@
    <p>Avoid interop problems via a partial reference implementation.</p>
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>I've got a few demos prepared. Depending on what interests people, I can skip around.</p>
    <p>The first is a simple one. A literate standard that mixes prose, reference implemenation code, and tests. I want to show what it's like to use the language, and what the reference implementation looks like.</p>
 
@@ -331,7 +363,7 @@
    <p>Using the playground to see libraries from target language users' points of view.</p>
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>Demo script:</p>
    <p>Show price.temper.md in VSCode.  Note the narrative structure: prose explains what and why; library code captures how; and test code captures examples.</p>
    <p>Open up <code>temper repl -b py</code> and show creating a value from Python and encoding it to JSON.</p>
@@ -354,7 +386,7 @@
    values with others; islands bridged.</p>
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>Here's what I hope you noticed:</p>
    <p>In a standards document, we explained things in prose, so it's accessible to subject matter experts.  Embedded code captures how computation is done, and tests.</p>
    <p>One thing to note: tests are pretty formulaic, so subject matter experts should be able to capture some requirements, as they figure things out, as tests, possibly with AI assistance, and hand them off to implementors.</p>
@@ -381,7 +413,7 @@
    <p>Library-driven interop good for the tools ecosystem.</p>
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>TODO: demo script, takeaways</p>
   </section>
 
@@ -402,7 +434,7 @@
    <p><small>&dagger; superset of a subset</small></p>
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>Parsing JSON is a minefield.</p>
    <p>I did a bunch of work on JSON security starting around 2008, so this hits me hard.</p>
    <p>That image is a test result matrix. Each row has a snippet of JSON, some invalid.</p>
@@ -428,7 +460,7 @@
    <p><big>Can we implement enough JSON once to solve interop but remain value-semantics agnostic?</big></p>
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>JSON is an interop format. It has numbers and strings, but it doesn't say what they mean, nor should it.</p>
    <p>And the relationship between JSON sub-expressions and values is incredibly context dependent.</p>
    <p>If Temper were available when JSON was first drafted, could we have dodged both the incredible number of subtle parsing interop issues without mandating value-semantics?</p>
@@ -436,7 +468,7 @@
 
   <section class="slide" id="event-driven-parsing"><h2 style="font-size: 100%">Event driven parsing</h2><img src="parsing-with-event-streams.png" alt="A sequence of three labeled diagrams. First label 'Source Text' above code '[1, 2, 3]'. Second label 'Abstract Syntax Tree' above one box labeled 'Array' that fans out to three boxes below labeled 'Number(1)', 'Number(2)', 'Number(3)'. Third and last diagram, 'Flattened Tree / Event Stream', above 'startArray, number(1), number(2), number(3), endArray'.  From the Array box in the middle diagram, two dashed arrows fan out to the 'startArray' and to the 'endArray' events.  One dashed arrow goes from the 'Number(1)' box in the second diagram to the corresponding 'number(1)' text in the third.  There are two labels to the right of the second diagram: 'Inner Nodes' lining up with the 'Array' box and 'Leaf Nodes' lining up with the 'Number(...)' boxes." width=431 height=257></section>
 
-  <section class=comment>
+  <section class="comment">
    <p>In security engineering, I was known as someone who does strange things with parsers.</p>
    <p>Event-driven parsing is a useful trick.</p>
    <p>Event-driven parsing allows representing both parsing and unparsing operations as a stream of events.  Conceptually, it involves flattening an abstract syntax tree to a list: each inner node becomes a tagged start and end node, and content lives at leaf ndoes.  But because each event is just a method call, it's flexible and performant.</p>
@@ -448,7 +480,7 @@
    <img src="json-parsing-pipeline.png" width=281 height=240 alt="a sequence diagram consisting of a vertical stack of four nodes each pointing to the next.  From top to bottom, in order, 'parse(&quot;[[123]]&quot;)', then header 'Event Stream' above 'startArr, startArr, number(123), endArr, endArr', then ValueBuildingEventReceiver, then 'listOf(listOf(123))'"><img src="json-unparsing-pipeline.png" width=281 height=240 alt="a sequence diagram consisting of a vertical stack of four nodes each pointing to the next.  From top to bottom, in order, 'serialize(listOf(listOf(123)))', then header 'Event Stream' above 'startArr, startArr, number(123), endArr, endArr', then JsonTextProducingEventReceiver, then '&quot;[[123]]&quot;'">
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>Event-driven parsing allows a very clean separation between structure and semantics, and as you can see here, you can have a value-agnostic parser produce the stream, and an actual unparser can consume the event stream.</p>
 
    <p>How does that simplify parsing and unparsing?</p>
@@ -476,7 +508,7 @@
    <p>Often, there are library design strategies that separate concerns.</p>
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>The takeaway from this JSON example: you don't need a full implementation to provide a lot of value.</p>
 
    <p>There may be good reasons not to do a full reference implementation.
@@ -497,7 +529,7 @@
    </ul>
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>I showed you three demos.</p>
    <p>I want to spur ideas on how the Temper language can help standards
     folk in their work, and the developers and software downstream.</p>
@@ -594,7 +626,7 @@
    <p>Embedded assumption:<br><i>Sun</i> and <i>son</i> sound the same in English.</p>
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>What complicates translation? I'm going to list a few
    things. I'll start off with a natural language example, and then
    show code that has a similar difficulty. This isn't meant to be
@@ -633,7 +665,7 @@ String encodeJson(Object o) {
     But in Python, every <i>bool</i> is an <i>int</i>.</p>
   </section>
 
-  <section class=comment>
+  <section class="comment">
    <p>Here's a fragment of code with an embedded assumption.</p>
    <p>It encodes a value as JSON.  If o is an integer, it formats as decimal.</p>
    <p>Otherwise, if o is a boolean it returns the keyword.</p>
