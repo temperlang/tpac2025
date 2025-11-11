@@ -147,8 +147,8 @@
    Google's internal forty languages initiative.</p>
 
    <p>I've done standards work before: Calconnect briefly, TC39 for a
-   long time.  Most recently, in W3C I edited an early version of the
-   trusted types spec.</p>
+   long time.  Most recently, in W3C I helped with an early version of
+   the trusted types spec.</p>
 
    <p>And I spent over a decade in security engineering. I was one of
    the non-cryptographers; I approached security from the perspective
@@ -175,15 +175,16 @@
   </section>
 
   <section class="comment">
-   <p>I want this talk to be interactive. I've prepared some
-   background and demos to set the stage.<p>
+   <p>I want this talk to be interactive, so jump in with any
+   questions. First, some background and demos to set the
+   stage.<p>
 
-   <p>Then I'd like you all to drive the discussion.
-   What would you do if you do differently if you could deliver
-   libraries to every language community?</p>
+   <p>Then I'd like you all to drive the discussion.  What would you
+   do differently if you could deliver libraries to every language
+   community?</p>
 
    <p>Then, if there's interest in programming language design, I have
-   prepared some remarks on what you do differently if you want
+   prepared some remarks on what you do differently to get
    high-fidelity translation.</p>
 
    <p>Finally, I can give an overview of the state of the project.
@@ -242,7 +243,7 @@
    <p>We've got a <i>lot</i> of technology stacks; a lot of
    programming languages and frameworks.</p>
    <p>That's great!  Developers can choose the right tool for the job.</p>
-   <p>That's great, but it comes at a cost: disconnected language islands.</p>
+   <p>But it comes at a cost: disconnected language islands.</p>
    <p>(The blue labels are mine) You can see here that data scientists
    cluster at the top: Python, TensorFlow.</p>
    <p>They use different stacks than mobile app devs on the right:
@@ -265,14 +266,30 @@
 
   <section class="comment">
    <p>This leads to a number of problems.</p>
-   <p>The same code gets written in multiple languages.  An estimated 30% of engineering effort is wasted on this.</p>
-   <p>Or you use a micro-service; sometimes that's appropriate. But if you're using a micro-service because you want to share logic, you've just added network delay, and a point of failure.</p>
-   <p>In practice, the inability to share across language boundaries leads to multiple implementations.  But not every language needs the whole thing, and why would you port tests for parts you don't need.  You end up with multiple, poorly tested, inconsistent, partial implementations.</p>
-   <p>And because there's no shared definitions, static anlyzers, code quality tools, can only look at one node in one language. Analyses stop at the island shore.</p>
-   <p>Temper enables a new mode of sharing, type definitions and logic, whole libraries, among every node in a multi-language system.</p>
-   <p>A developer using Temper can solve a problem for every programming language communities.</p>
-   <p>Focus effort on one implementation, one source of truth.  Amortize testing and documentation across all the language communities.</p>
-   <p>And from the engineering management side: an alternative to "every teams own a service in production", is "some teams own a library or standard that supports many other teams"</p>
+   <p>The same code gets written in multiple languages.  An estimated
+   30% of engineering effort is wasted on this.</p>
+   <p>Or you use a micro-service; sometimes that's appropriate. But if
+   you're using a micro-service because you want to share logic,
+   you've just added network delay, and a point of failure.</p>
+   <p>In practice, the inability to share across language boundaries
+   leads to multiple implementations.  But not every language needs
+   the whole thing, and why would you port tests for parts you don't
+   need.  You end up with multiple, poorly tested, inconsistent,
+   partial implementations.</p>
+   <p>And because there's no shared definitions, static anlyzers, code
+   quality tools, can only look at one node in one language. Analyses
+   stop at the island shore.</p>
+   <p>Temper enables a new mode of sharing, type definitions and
+   logic, whole libraries, among every node in a multi-language
+   system.</p>
+   <p>A developer using Temper can solve a problem for every
+   programming language community.</p>
+   <p>Focus effort on one implementation, one source of truth.
+   Amortize testing and documentation across all the language
+   communities.</p>
+   <p>And from the engineering management side: an alternative to
+   "every teams owns a service in production", is "some teams own a
+   library or standard that supports many other teams"</p>
   </section>
 
   <section class="slide" id="connections">
@@ -300,7 +317,7 @@
    to support.</p>
   </section>
 
-  <section class="slide lightmode" id="guardrails-across-network-gaps">
+  <section class="slide" id="guardrails-across-network-gaps">
    <h2>Types Extended</h2>
    <figure>
     <a href="type-guard-rails.png"><img src="type-guard-rails.png" alt="Diagram consisting of several elements: A file marked &quot;Temper&quot; with code &quot;class Person { ... public get age(): Int { ... } }&quot; pointing into a box &quot;> temper build&quot; that fans out to two boxes labeled &quot;Server&quot; and &quot;Client&quot;.  The Server box is a file marked &quot;Java&quot; and contains code &quot;response.send(new Person(name, dateOfBirth))&quot;.  The Client box is a file marked &quot;JS/TS&quot; and contains &quot;let person: Person = Person.fromJSON(resp); f(person.age)&quot;.  Moving from Server to Client is a JSON file with content &quot;{ &quot;name&quot;: &quot;Firsty McLasty&quot;, &quot;dateOfBirth&quot;: &quot;2000-01-01&quot; }&quot;.  There are two speech bubbles with arrows too.  The first says &quot;age not shipped but available via computation&quot; and points to the JSON and points to &quot;f(person.age)&quot; in the Client code.  The second says &quot;Type shared in request + response&quot; and points to &quot;new Person&quot; in the Server code and &quot;let person: Person&quot; in the Client clode."></a>
@@ -316,7 +333,8 @@
    class, Person, is shared between Java and JavaScript by
    translation, but the two also share logic, encoders for values to
    and from JSON. And by sharing a computed property definition, your
-   wire format becomes concise.</p>
+   wire format becomes concise; we don't need to send the age back
+   and forth because we can compute it anywhere.</p>
    <p>And going back to static analysis, now static analyzers have
    common points of reference.</p>
   </section>
@@ -358,14 +376,16 @@
 
    <p>The second, CSS colors. Browsers care about CSS colors, but so
    do graphic designer tools. I was hoping to frame discussion about
-   how a standard could encourage a rich tool ecosystem by by making
+   how a standard could encourage a rich tool ecosystem by making
    colorspace logic ubiquitous.</p>
 
    <p>Third, the JSON standard. There are a lot of parsing corner
-   cases that cause interop problems. JSON Could those have been
+   cases that cause interop problems. Could those have been
    avoided if just part of the specification were ubiquitously
    available?</p>
   </section>
+
+<!-- timestamp 10 minutes -->
 
   <section class="slide side" id="iso-4217">
    <h2>Currency type as a Library</h2>
@@ -385,16 +405,66 @@
 
   <section class="comment">
    <p>Demo script:</p>
-   <p>Show price.temper.md in VSCode.  Note the narrative structure:
-   prose explains what and why; library code captures how; and test
-   code captures examples.</p>
-   <p>Open up <code>temper repl -b py</code> and show creating a value
-   from Python and encoding it to JSON.</p>
-   <p>Switch to <code>temper repl -b java</code> and show unpacking a
-   value and how it's just a regular Java class.</p>
-   <p>Show the add-two-prices coroutine, and that it works in Java
-   despite Java not having native support for coroutines.</p>
+   <p>-- show price.temper.md in VSCode.</p>
+   <p>Here's Temper source code embedded in Markdown, literate style.</p>
+   <p>And we define a price class here.</p>
+   <p>The prose explains how the currencyCode and the amount relate
+   to one another.</p>
+   <p>-- scroll to L20</p>
+   <p>And here we're explaining how minor units affect the amount.</p>
+   <p>So we explain what we're doing in prose, and how to do it in code.</p>
+   <p>-- scroll down to toString</p>
+   <p>We've got some logic here to format a price as a human-readable string</p>
+   <p>-- scroll to test at L70</p>
+   <p>And down here we have examples as unittests</p>
+   <p>So the narrative structure here is "here's what we're doing, here's code, how we compute what needs computing, and for example, unit tests.</p>
+<!-- timestamp 11 minutes -->
+   <p>-- <code>temper repl -b py</code></p>
+   <p>temper repl dash b py starts up a python REPL, a playground, with the Temper libraries loaded.  Let me import what I'll need</p>
+   <pre><code>
+from cart_demo import Price
+from temper_std.json import JsonTextProducer
+help(Price)
+</code></pre>
+   <p>Here's the docs for the Price class.  You can see it's just a regular Python class. I can create a price, 1000 yen</p>
+   <pre><code>
+p = Price('JPY', 1000)
+p.to_string()
+</code></pre>
+   <p>It formatted nicely using the conventions from the price data table in the ISO.</p>
+   <pre><code>
+json_out = JsonTextProducer()
+Price.json_adapter().encode_to_json(p, json_out)
+json_out.to_json_string()
+</code></pre>
+   <p>And we can encode a price to a JSON value using our logic which means we can send values from one language using Temper to another.</p>
+   <p>-- <code>temper repl -b java</code><p>
+   <p>Switching over to Java. Let met copy/paste some imports.</p>
+   <pre><code>
+import temper.std.json.*;
+import com.example.cartdemo.*;
+Price p = new Price("JPY", 1000);
+Price.jsonAdapter().decodeFromJson(JsonGlobal.parseJson("{\"currencyCode\":\"JPY\",\"amount\":1000}"), NullInterchangeContext.instance)
+$4.getClass()
+   </code></pre>
+   <p>I created a price, and it formatted using the formatting logic in the literate spec.</p>
+   <p>And I can decode the JSON from Python if I wanted to demo a whole server setup.</p>
+   <p>And when I inspect the decoded JSON, it's a Java object whose class is the Price type.</p>
+   <p>Show unpacking a value and how it's just a regular Java class.</p>
+   <p>-- look in temper.out/java/cart-demo/</p>
+   <p>We've got a pom.xml here.  We generated the source translations
+   and also the package metadata to support the whole java tool chain.</p>
+   <p>-- bat temper.out/java/cart-demo/src/main/java/com/example/cartdemo/Price.java</p>
+   <p>Here's the translation of the Price class into Java.  Our
+   translation is just a regular Java class and you can see some of
+   the documentation from the literate spec attached here that flows
+   through to javadoc.</p>
+   <p>-- bat temper.out/java/cart-demo/src/test/java/com/example/cartdemo/CartdemoTest.java</p>
+   <p>-- search for priceFormat</p>
+   <p>We translate not only the production code.  Here's a translated file under src/test, where maven expects unit test files.</p>
+   <p>We translated the unit tests to Java too.  Test code tends to be pretty formulaic; less room for mistranslation. So even though this is a new language, test coverage will give you confidence in the translation.</p>
   </section>
+<!-- timestamp 18 minutes -->
 
   <section class="slide side" id="iso-4217-takeaways">
    <h2>Currency type as a Library</h2>
@@ -421,20 +491,75 @@
    experts should be able to capture some requirements, as they figure
    things out, as tests, possibly with AI assistance, and hand them
    off to implementors.</p>
-   <p>At the end of the standards drafting process, in normal
-   standards process, that's when the hard work for implementors
-   starts.  But in this case, you've got a well-tested reference
-   implementation ready.</p>
+   <p>At the end of the standards drafting process, mormally, that's
+   when the hard work for implementors starts.  But in this case,
+   you've got a well-tested reference implementation ready.</p>
    <p>With Temper, you deliver high quality support to devs and bridge
    those language community islands.</p>
   </section>
 
-  <section class="slide side" id="demo-prismora">
+  <section class="slide side" id="demo-css-colors">
    <h2>CSS Colors</h2>
 
    <figure class="side">
     <a href="vscode-prismora.png"><img src="vscode-prismora.png" alt="Screenshot of VSCode showing a file browser inside 'prismora' including files with suffix .temper.md including color, generic, helpers, matrix, oklab, rgb.  The source tab looks like markdown with header Oklab Color Space and subheader Oklab Conversion and then includes a 'References' list of URLs including bottoson.github, oklch.com and w3.org/TR/css-color-4.  Following it is a nested code block defining srgbLinearToOkLab function that takes an rgb: Matrix and which returns a matrix.  Below that are two constant definitions for 3x3 matrices: srgbLinearToOklab0 and ...1 and a helper function definition `let oklabToSrgbLinear."></a>
-    <caption>VSCode for the prismora library with oklab.temper.md loaded</caption>
+    <caption>VSCode with oklab.temper.md</caption>
+   </figure>
+
+   <p>Demo&hellip;</p>
+  </section>
+
+  <section class="comment">
+   <p>-- Show css-color-4 in VSCode</p>
+   <p>The target audience for the CSS colors module is browser
+   implementors, but there's an entire ecosystem outside the browser.
+   Graphic designers need tools to author and refactor CSS, design
+   systems people, CSS generating DSLs in the Markdown publishing
+   space, and tools like CSS minifiers.</p>
+   <p>The nice thing about libraries is that you can provide
+   conveniences.  What is the named color closest to a color, and how
+   close is it, in the OKLab space or the RGB space?  This function
+   answers that.</p>
+   <p>-- <code>cd examples/csharp/ColorPick; dotnet run</code></p>
+   <p>Here's a simple C# Avalonia app that I can load an image into.</p>
+   <p>-- Load w3logo.png, click some points</p>
+   <p>I click a point, and it shows the color in the RGB space but it also
+   shows the closest named number in the Oklab and RGB spaces.</p>
+   <p>-- Show css-color-4/examples/csharp/ColorPick/ColorPick.csproj</p>
+   <p>Many developer tools are not written in a web language entirely, so
+   might implement their own partial, divergent implementations.</p>
+   <p>Here's the C# project file.  Here it depends on the Temper
+   output directory for the translated color library code because we
+   have not published this to nuget.</p>
+   <p>-- Show css-color-4/examples/csharp/ColorPick/MainWindow.axaml.cs</p>
+   <p>This is the app code that handles user events.  Scrolling down
+   to OnImageClick.  Towards the bottom, we're calling out to the
+   Temper translation of the NamedColors code to find the closest.  So
+   a Temper reference implementation supports tools development in C#.</p>
+   <p>-- Show css-color4/src/conversion.temper.md</p>
+   <p>If you're familiar with the colors spec, this'll look familiar.</p>
+   <p>It's got a bunch of colorspace conversion utilities.</p>
+   <p>And if I scroll down, these are all bottoming out on some matrix math.</p>
+   <p>-- Show css-color4/src/named.temper.md</p>
+   <p>And here is the CSS named color list, but if I scroll down,
+   you'll see it turned into a code list.</p>
+   <p>One thing we could do for literate Temper is a bit of
+   metaprogramming, a macro that can map over rows in an HTML or markdown
+   table to turn it into values.</p>
+   <p>-- Show css-color4/src/tests.temper.md</p>
+   <p>Here's tests for our implementation.  These get translated to
+   unit tests in C#, so you get confidence in the C# translation by
+   just running <code>dotnet test</code>.</p>
+  </section>
+
+<!-- timestamp: 34 minutes -->
+
+  <section class="slide side" id="demo-css-colors-wrapup">
+   <h2>CSS Colors</h2>
+
+   <figure class="side">
+    <a href="vscode-prismora.png"><img src="vscode-prismora.png" alt="Screenshot of VSCode showing a file browser inside 'prismora' including files with suffix .temper.md including color, generic, helpers, matrix, oklab, rgb.  The source tab looks like markdown with header Oklab Color Space and subheader Oklab Conversion and then includes a 'References' list of URLs including bottoson.github, oklch.com and w3.org/TR/css-color-4.  Following it is a nested code block defining srgbLinearToOkLab function that takes an rgb: Matrix and which returns a matrix.  Below that are two constant definitions for 3x3 matrices: srgbLinearToOklab0 and ...1 and a helper function definition `let oklabToSrgbLinear."></a>
+    <caption>VSCode with oklab.temper.md</caption>
    </figure>
 
    <p>Many potential users not using a web platform PL:</p>
@@ -451,22 +576,11 @@
   </section>
 
   <section class="comment">
-   <p>We wrote a library for colorspace conversions, Prismora.</p>
-   <p><i>Show prismora</i></p>
-   <p>And the nice thing about libraries is that you can provide nice
-   conveniences.  What is the named color closest to a color, and how
-   close is it, in the OKLab space?  This function answers that.</p>
-   <p>The target audience for the CSS colors module is browser
-   implementors, but there's an entire ecosystem outside the browser.
-   Graphic designers need tools to author and refactor CSS, design
-   systems people, CSS-plus languages in the Markdown publishing
-   space, and tools like CSS minifiers.</p>
-   <p>Many of those are not written in a web language entirely, so
-   might implement their own again partial, divergent
-   implementations.</p>
-   <p>Might it be easier for the CSS colors maintainers to evolve the
-   spec if the tool ecosystem could track parts of it by just doing a
-   library update?</p>
+   <p>Obviously, there is already a thriving CSS tool ecosystem.</p>
+   <p>It have been easier to bootstrap if Temper had been available?</li>
+   <p>Today, might it be easier for the CSS colors maintainers to
+   evolve the spec if the tool ecosystem could track parts of it by
+   just doing a library update?</p>
   </section>
 
   <section class="slide side" id="json-minefield">
@@ -484,7 +598,7 @@
 
    <p>With Temper, this could have been avoided.</p>
 
-   <p><small>&dagger; superset of a subset</small></p>
+   <p><small>&dagger; superset of a subset, aka :shrug: relationship</small></p>
   </section>
 
   <section class="comment">
@@ -528,22 +642,25 @@
    doesn't say what they mean, nor should it.</p>
    <p>And the relationship between JSON sub-expressions and values is
    incredibly context dependent.</p>
+   <p>Here, [1,2] could mean a list of 32 bit ints, or of big decimals,
+   or a 2 dimensional point.</p>
    <p>If Temper were available when JSON was first drafted, could we
-   have dodged both the incredible number of subtle parsing interop
-   issues without mandating value-semantics?</p>
+   have dodged the all these parsing interop issues while leaving the
+   value semantics to the application code that has the context?</p>
   </section>
 
   <section class="slide" id="event-driven-parsing"><h2 style="font-size: 100%">Event driven parsing</h2><img src="parsing-with-event-streams.png" alt="A sequence of three labeled diagrams. First label 'Source Text' above code '[1, 2, 3]'. Second label 'Abstract Syntax Tree' above one box labeled 'Array' that fans out to three boxes below labeled 'Number(1)', 'Number(2)', 'Number(3)'. Third and last diagram, 'Flattened Tree / Event Stream', above 'startArray, number(1), number(2), number(3), endArray'.  From the Array box in the middle diagram, two dashed arrows fan out to the 'startArray' and to the 'endArray' events.  One dashed arrow goes from the 'Number(1)' box in the second diagram to the corresponding 'number(1)' text in the third.  There are two labels to the right of the second diagram: 'Inner Nodes' lining up with the 'Array' box and 'Leaf Nodes' lining up with the 'Number(...)' boxes." width=431 height=257></section>
 
   <section class="comment">
-   <p>Among security engineers, I was known as a person who does strange
-   things with parsers.</p>
-   <p>Event-driven parsing is a useful trick.</p>
+   <p>Among security engineers, I was known as that guy who does
+   strange things with parsers.</p>
+   <p>I'd like to show you a useful trick: event-driven parsing.</p>
    <p>It allows representing both parsing and unparsing operations as
    a stream of events.  Conceptually, it involves flattening an
    abstract syntax tree to a list: each inner node becomes a tagged
    start and end node, and content lives at leaf nodes.  But because
-   each event is just a method call, it's flexible and performant.</p>
+   each event corresponds to a method call, it's flexible and
+   performant.  There's no need to build a tree in memory.</p>
   </section>
 
   <section class="slide" id="json-interop-pipelines">
@@ -553,11 +670,11 @@
    <img src="json-parsing-pipeline.png" width=281 height=240 alt="a sequence diagram consisting of a vertical stack of four nodes each pointing to the next.  From top to bottom, in order, 'parse(&quot;[[123]]&quot;)', then header 'Event Stream' above 'startArr, startArr, number(123), endArr, endArr', then ValueBuildingEventReceiver, then 'listOf(listOf(123))'"><img src="json-unparsing-pipeline.png" width=281 height=240 alt="a sequence diagram consisting of a vertical stack of four nodes each pointing to the next.  From top to bottom, in order, 'serialize(listOf(listOf(123)))', then header 'Event Stream' above 'startArr, startArr, number(123), endArr, endArr', then JsonTextProducingEventReceiver, then '&quot;[[123]]&quot;'">
   </section>
 
+  <!-- timestamp 31 -->
+
   <section class="comment">
    <p>Event-driven parsing allows a very clean separation between
-   structure and semantics, and as you can see here, you can have a
-   value-agnostic parser produce the stream, and an actual unparser
-   can consume the event stream.</p>
+   structure and semantics.</p>
 
    <p>How does that simplify parsing and unparsing?</p>
 
@@ -574,6 +691,49 @@
 
    <p>Let's look at Temper's std/json library which does this.</p>
   </section>
+
+  <!-- timestamp: 30 minutes -->
+
+  <section class="slide" id="json-demo">
+   <h2>JSON demo</h2>
+
+   <p>Demo&hellip;</p>
+  </section>
+
+  <section class="comment">
+   <p>-- Show std/json/json.temper.md</p>
+   <p>Here's part of Temper's standard library.
+   We implemented JSON support including auto-deriving encoders
+   and decoders.</p>
+   <p>-- Scroll to interface JsonProducer L37</p>
+   <p>Here, a JSON producer receives events.</p>
+   <p>For example, to encode an object record, you start an object,
+   then you issue a key event, and a sequence of events for the value,
+   and finally after the last property you end the object.</p>
+   <p>-- Scroll down to parseJsonValue L764</p>
+   <p>Here's the workhorse parsing method.  It takes the text, a
+   location in the text, and the producer, and it issues events and
+   then returns the start of the still unparsed portion.  And you can
+   see it looksahead by 1, classifies the next token and then
+    delegates to a more specific parse method.</p>
+   <p>-- Scroll up to JsonTextProducer L365</p>
+   <p>As I explained earlier, unparsing uses the same machinery.</p>
+   <p>JsonTextProducer is a JsonProducer that composes a JSON text.</p>
+   <p>-- Scroll up a bit to the state machine comment L356</p>
+   <p>Internally, it models a state machine so it knows when to insert
+   commas and colon tokens.</p>
+   <p>-- Scroll down a bit to `var wellFormed`.</p>
+   <p>And it keeps track of whether its well-formed; if it gets an odd
+   sequence of events, then it sets wellFormed to false to indicate
+   that the content it has appended to its internal buffer might not
+   be a prefix of a valid JSON text.</p>
+   <p>-- Scroll down to booleanValue L453</p>
+   <p>Here we force a state transition before a value.  If we're in a
+   non-empty array, that'll output a comma so we're ready for a
+   value.</p>
+  </section>
+
+  <!-- timestamp 34 minutes -->
 
   <section class="slide" id="json-wrapup">
    <h2>JSON demo takeaways</h2>
@@ -624,7 +784,7 @@
    other.  If some other W3C group has questions about what you're
    doing and how it affects them, giving them a reference
    implementation that works in the languages they use might help.</p>
-   <p>You all would probably understand better than me, where that'd be.</p>
+   <p>You all would probably know better than me, what that'd look like.</p>
   </section>
 
   <section class="slide" id="signpost-3">
@@ -645,6 +805,8 @@
    aid.</p>
    <p>So opening this up, how this might help you in your work?</p>
   </section>
+
+  <!-- timestamp 36 minutes -->
 
   <section class="slide" id="signpost-4">
    <p style="font-size: 110%">Why a translating language?</p>
@@ -756,16 +918,19 @@ String encodeJson(Object o) {
    <p>Here's a fragment of code with an embedded assumption.</p>
    <p>It encodes a value as JSON.  If o is an integer, it formats as decimal.</p>
    <p>Otherwise, if o is a boolean it returns the keyword.</p>
-   <p>But there's an order to those tests.  The Java version works
-   because the first test will fail if the second succeeds.  There's an
-   embedded assumption, true in Java, that booleans are not
-   integers.</p>
-   <p>Python got a distinct bool type around version 2.3 or 2.4, but until
-   then people just used 1 and 0 for true and false.  Python already had a
-   "not" operator that returned an int.  Rather than introduce a new "not"
-   operator they just reused the old one but it changed from returning ints
-   to returning ints that are also bools.</p>
+   <p>But there's an order to those instanceof checks.  The Java
+   version works because the first test will fail if the second
+   succeeds.  There's an embedded assumption, true in Java, that
+   booleans are not integers.</p>
+   <p>Python got a distinct bool type around version 2.3 or 2.4, but
+   until then people just used 1 and 0 for true and false.  Python
+   already had a "not" operator that returned an int.  Rather than
+   introduce a new "not" operator they just reused the old one but it
+   changed from returning ints to returning ints that are also bools.
+   In Python, every bool is an int.</p>
   </section>
+
+  <!-- timestamp 40 minutes -->
 
   <section class="slide" id="complicators-2a">
    <h2>What complicates translation?</h2>
@@ -777,18 +942,25 @@ String encodeJson(Object o) {
 
    <p>In idiomatic Japanese, you must include honorifics, e.g. <i>-san</i>.
 
-   <p>In English, you must specify a subject: "<u>It</u> is windy."</p>
+   <p>In English, you must specify a subject: "<u>It</u> is windy."
+   What is windy?  I don't know.  It is just there because English
+   requires a subject.</p>
 
    <p>A translator must synthesize missing, required elements.</p>
   </section>
 
   <section class="comment">
-   <p>Next complication: in almost any language, you can express a given idea, but
-   in some, you have to express certain other things.</p>
-   <p>For example, in English, you can specify honorifics: Mister or Mrs.  Often you don't.</p>
+   <p>Next complication: in almost any language, you can express a
+   given idea, but in some, you have to express certain other
+   things.</p>
+   <p>For example, in English, you can specify honorifics: Mister or
+   Mrs.  Often you don't.</p>
    <p>In Japanese, it's unidiomatic to leave them out.</p>
-   <p>And in English some things, subjects and articles, are required.</p>
-   <p>A translator must synthesize missing, required elements. In the case of honorifics, this might require researching the relative status of the speaker and the addressee.</p>
+   <p>And in English some things, subjects and articles, are
+   required.</p>
+   <p>A translator must synthesize missing, required elements. In the
+   case of honorifics, this might require researching the relative
+   status of the speaker and the addressee.</p>
   </section>
 
   <section class="slide" id="complicators-2b">
@@ -823,8 +995,12 @@ String encodeJson(Object o) {
   </section>
 
   <section class="comment">
-   <p>Sometimes, there's a really good translation for a term.  English Ghost and German Geist are cognates.</p>
-   <p>When you translate Zeitgeist from German into English, you need to use English's Romance-language borrow Spirit instead because Ghost has additional connotations beyond the German Geist, namely that a ghost is a disembodied spirit.</p>
+   <p>Sometimes, there's a really good translation for a term.
+   English Ghost and German Geist are cognates.</p>
+   <p>When you translate Zeitgeist from German into English, you need
+   to use the English word Spirit, a Romance language borrow, because
+   Ghost has additional connotations, namely a ghost is a disembodied
+   spirit.</p>
   </section>
 
   <section class="slide" id="complicators-3b">
@@ -838,31 +1014,40 @@ String encodeJson(Object o) {
 
   <section class="comment">
    <p>Does one string contain another as a substring?</p>
-   <p>Strings are a workhorse type.  They should have the same semantics across languages.</p>
-   <p>They do not. OMFG they do not.  Because variable-length encodings.</p>
-   <p>Here's an example of checking whether a surrogate is a substring of a supplemental codepoint.</p>
-   <p>We put a lot of very careful work into getting efficient, reliable semantics for strings in a way that's familiar to developers.</p>
+   <p>Strings are a workhorse type.  Ideally they'd have the same
+   semantics across languages.</p>
+   <p>They do not. Not even close.  Because variable-length encodings.</p>
+   <p>Here's an example of checking whether a surrogate is a substring
+   of a supplemental codepoint.  That's true for JavaScript and false
+   for Python.</p>
+   <p>We put a lot of very careful work into getting efficient,
+   reliable semantics for strings in a way that's familiar to
+   developers.</p>
   </section>
 
   <section class="slide" id="complicators-4">
    <h2>What complicates translation?</h2>
 
-   <p>Ad-hoc types: tuples, arrow types.</p>
+   <p>Ad-hoc types: tuple types, arrow types.</p>
 
    <p>Value identity / pointer equality (haecceity): <code>===</code>.</p>
 
-   <p>(Wait! You thought computer scientists couldn't invent problems with no analogue in human language?!)</p>
+   <p>(Wait! You thought computer scientists couldn't invent problems
+   with no analogue in human language?!)</p>
   </section>
 
   <section class="comment">
-   <p>Finally, ad-hoc types.</p>
-   <p>Yes, we computer scientists have come up with problems that would shock professional linguists.  Go us!</p>
-   <p>In nominal types, for two types to match, they must be defined in the same place.</p>
-   <p>But ad-hoc types, combine other types.  If those other types are combined in the same way, they match.</p>
+   <p>More complicators.</p>
+   <p>Yes, we computer scientists have come up with problems that
+   would shock professional linguists.  Go us!</p>
+   <p>In nominal types, for two types to match, they must be defined
+   in the same place.</p>
+   <p>But ad-hoc types, combine other types.  If those other types are
+   combined in the same way, they match.</p>
    <p>Strangely ad-hoc types break dependency management.</p>
-   <p>It's hard to translate ad-hoc types to nominal type systems: where do you put the translation if the same ad-hoc type is used from multiple modules that are co-referenced by a third that needs them to match?</p>
-   <p>Value identity
   </section>
+
+  <!-- timestamp 43 minutes -->
 
   <section class="slide" id="complicators-5">
    <h2>Ad-hoc types</h2>
@@ -870,10 +1055,20 @@ String encodeJson(Object o) {
   </section>
 
   <section class="comment">
-   <p>Ad-hoc types introduce the following problem when you need to translate to a language that does not have ad-hoc types.</p>
-   <p>The problem is this.  In a nominally typed language, every type is declared somewhere.  The bottom node, A, declares a type.  Then B and C both import and use that declaration.  That means D can use B and C together.</p>
-   <p>With an ad-hoc type, there may be no A to which the separate translations of B and C refer. This is a problem for translating D to use both.</p>
+   <p>Ad-hoc types cause problems when you need to translate to a
+   language that does not have ad-hoc types.</p>
+   <p>The problem is this.  In a nominally typed language, every type
+   is declared somewhere.  The bottom node, A, declares a type.  Then
+   B and C both import and use that declaration.  That means D can use
+   B and C together.</p>
+   <p>With an ad-hoc type, there may be no A to which the separate
+   translations of B and C refer. This is a problem for translating D
+   to use both.</p>
+   <p>Scala and Kotlin have worked around this fairly successfully, but
+   the solutions have drawbacks.</p>
   </section>
+
+  <!-- timestamp 44 minutes -->
 
   <section class="slide" id="design-choice-nullity">
    <h2>Nullity</h2>
@@ -890,12 +1085,21 @@ String encodeJson(Object o) {
   <section class="comment">
    <p>Moving to specific design decisions:</p>
    <p>Null, everyone's favorite billion dollar problem.</p>
-   <p>Actually the problem was unchecked null, something we avoid.</p>
-   <p>Programmers need some way to represent optional inputs, unavailable outputs, and often intermediate values that are not yet available.</p>
-   <p>There are two main approaches to that in modern languages: null and option types</p>
-   <p>These two are not equivalent, because the singleton null hides an ambiguity.</p>
-   <p>We have to interoperate with both languages, so Temper has a null singleton, but type checked.  And we do some additional static checks that affect type polymorphic code, so that it's impossible to write Temper code that trips over that ambiguity.</p>
-   <p>Just an example of the kind of thing that trips up languages that define semantics for their runtime, and then try to expand outside it.  But we planned ahead.</p>
+   <p>Actually the problem was unchecked null, which Temper checks.</p>
+   <p>Programmers need some way to represent optional inputs,
+   unavailable outputs, and often intermediate values that are not yet
+   available.</p>
+   <p>There are two main approaches to that in modern languages: null
+   and option types</p>
+   <p>These two are not equivalent, because the singleton null hides
+   an ambiguity.</p>
+   <p>We have to interoperate with both languages, so Temper has a
+   null singleton, but type checks nullity.  And we do some additional
+   static checks that affect type polymorphic code, so that it's
+   impossible to write Temper code that trips over that ambiguity.</p>
+   <p>This is just one example of the kind of thing that trips up
+   languages that define semantics for their runtime, and then try to
+   expand outside it.  But we planned ahead.</p>
   </section>
 
   <section class="slide" id="design-choice-failure">
@@ -904,19 +1108,33 @@ String encodeJson(Object o) {
    <p>Goal: Idiomatic way to represent and recover from failure.</p>
 
    <p>Translate to exceptions, or <i>Result</i>s as appropriate.<br>
-    Go: extra output, OCaml/Rust/C++: Results, others: exceptions</p>
+   Go: extra output, OCaml/Rust/C++: Results, others: exceptions</p>
 
-   <p>Complicator: exceptions, non-local transfer of control.  Don't want to catch and rethrow repeatedly.</p>
+   <p>Complicator: exceptions, non-local transfer of control.  Don't
+   want to catch and rethrow repeatedly.</p>
 
-   <p>Solution: <i>Result</i> semantics but results are not first class; user code cannot use a <i>Result</i> type for local variables / inputs / fields.</p>
+   <p>Solution: <i>Result</i> semantics but results are not first
+   class; user code cannot use a <i>Result</i> type for local
+   variables / inputs / fields.</p>
   </section>
 
   <section class="comment">
-   <p>Error handling. If a function realizes it's not going to be able to produce a usable result.  For example, it's parsing a number but the string is malformed or a file is unreadable.  When that happens it needs to hand control to code that can try to recover or try a different strategy.</p>
+   <p>Error handling. If a function realizes it's not going to be able
+   to produce a usable result.  For example, it's parsing a number but
+   the string is malformed or a file is unreadable.  When that happens
+   it needs to hand control to code that can try to recover or try a
+   different strategy.</p>
    <p>Exceptions are a common way to do that in modern languages.</p>
-   <p>But if you're familiar with Rust or Go or OCaml, then you're familiar with Result types.</p>
-   <p>Error handling is super important.  If you don't support a language's preferred way of handling errors, then you're failing users who are working within that paradigm to write reliable code.</p>
-   <p>Result types are a principled approach to error handling.  It turns out that if you don't treat them as first class, then you can provide good support both to languages that have them and to languages that use exceptions.</p>
+   <p>But if you're familiar with Rust or Go or OCaml, then you're
+   familiar with Result types.</p>
+   <p>Error handling is super important.  If you don't support a
+   language's preferred way of handling errors, then you're failing
+   users who are working within that paradigm to write reliable
+   code.</p>
+   <p>Result types are a principled approach to error handling.  It
+   turns out that if you don't treat them as first class, these
+   restrictions here, then you can provide good support both to
+   languages that have them and to languages that use exceptions.</p>
   </section>
 
   <section class="slide" id="design-choice-generic-operations-1">
@@ -931,10 +1149,17 @@ String encodeJson(Object o) {
   </section>
 
   <section class="comment">
-   <p>Generic operations.  A generic operation is one where the type of an input affects part of the operation, but often most of it doesn't depend on the type.</p>
-   <p>As you can see here, the less-than operator is generic.  It can apply to numbers or to strings.  When applied to numbers, it does numeric comparison.  When applied to strings, it does lexicographic comparison.</p>
-   <p>And when we convert a floating point number to a string, we want some consistency.</p>
-   <p>But some dynamic languages don't make the distinctions I just outlined.</p>
+   <p>Generic operations.  A generic operation is one where the type
+   of an input affects part of the operation, but often most of it
+   doesn't depend on the type.</p>
+   <p>As you can see here, the less-than operator is generic.  It can
+   apply to numbers or to strings.  When applied to numbers, it does
+   numeric comparison.  When applied to strings, it does lexicographic
+   comparison.</p>
+   <p>And when we convert a floating point number to a string, we want
+   some consistency.</p>
+   <p>But some dynamic languages don't make the distinctions I just
+   outlined.</p>
   </section>
 
   <section class="slide" id="design-choice-generic-operations-2">
@@ -953,13 +1178,12 @@ String encodeJson(Object o) {
    the type of its arguments.  Not only does the performance suck, but
    there just isn't enough information at runtime.</p>
    <p>That's our solution.  We solved this problem because we had to
-   by repurposing a number of well-understood PL techniques but
-   existing languages just won't because they languages grew up
-   alongside a runtime.  That's a lot of jargon, but I'm happy to
-   explain offline.</p>
-   <p>But because we solved this, that uncontroversial, to
-   developers', behaviour of comparisons and stringification can just
-   work.</p>
+   by repurposing a number of well-understood PL techniques.  But
+   existing languages just won't because they grew up alongside a
+   runtime that mandated a behavior.  Sorry that the solution uses a
+   lot of jargon, but I'm happy to explain offline.</p>
+   <p>But because we solved this, developers can rely on an intuitive
+   semantics.</p>
   </section>
 
   <section class="slide" id="design-choice-memory-1">
@@ -988,9 +1212,12 @@ String encodeJson(Object o) {
   <section class="comment">
    <p>This was a tough call. There's no make-memory-easy option.</p>
 
-   <p>What we ended up with is a bit different, but it keeps the burden on more specialized library developers who maintain core, generic libraries.</p>
+   <p>What we ended up with is a bit different, but it keeps the
+   burden on more specialized library developers who maintain core,
+   generic libraries.</p>
 
-   <p>We added static checks to class declarations, which can point to things.  And we also statically checks generic type phrases.</p>
+   <p>We added static checks to class declarations and to type
+   parameter bindings.</p>
   </section>
 
   <section class="slide" id="design-choice-memory-3">
@@ -1004,8 +1231,12 @@ String encodeJson(Object o) {
    <p>Here's a recursive data type, a simple Lisp-style Cons list.</p>
    <p>Each type involved has a node.</p>
    <p>A Cons points to its head and tail.</p>
-   <p>A Cons instance's tail has to be older than it, so the loop there is all less-than edges.</p>
-   <p>A Cons's could point to something that points back to itself, so the programmer has to put some extra limitation.  We can have a Cons list that points to some other kind of Cons list.  A Cons&lt;Cons&lt;T&gt;&gt; can point to a Cons&lt;T&gt; but we can't let <i>T</i> bind to a thing that can point back to the same Cons&lt;T&gt; via a mutable property.</p>
+   <p>A Cons instance's tail has to be older than it, so the loop
+   there is all less-than edges.</p>
+   <p>A Cons's head could point to something that points back to
+   itself, so the programmer has to put some extra limitation.  That
+   sideways tack means F can't bind to something that points to a
+   Cons&lt;F&gt;.</p>
   </section>
 
   <section class="slide" id="design-choice-memory-4">
@@ -1016,43 +1247,73 @@ String encodeJson(Object o) {
   </section>
 
   <section class="comment">
-   <p>But if we made the tail mutable, then a cons list could be relinked to create a cycle, note the less-than-or-equals edge.</p>
-   <p>This kind of cycle analysis just works for standard OCaml record style, but requires extra, implementation-detail leaking restrictions for generic types.</p>
-   <p>The basic idea here is: if the less-than edges don't form a cycle, then there exists an order in which reference-counted records will destruct.  But if node has to be less-than itself, a contradiction, then there is no order and we don't know that it'll deallocate.</p>
+   <p>But if we made the tail mutable, then a cons list could be
+   relinked to create a cycle, note the less-than-or-equals edge.</p>
+   <p>This kind of cycle analysis just works for standard OCaml record
+   style, but requires extra, implementation-detail leaking
+   restrictions for generic types.</p>
+   <p>The basic idea here is: if the less-than edges don't form a
+   cycle, then there exists an order in which reference-counted
+   records will destruct.  But if node has to be less-than itself, a
+   contradiction, then there is no order and we don't know that it'll
+   deallocate.</p>
   </section>
+
+  <!-- timestamp 50 minutes -->
 
   <section class="slide" id="design-choice-concurrency-1">
    <h2>Concurrency</h2>
 
-   <p>Goal: safe usable concurrency. Do not consume resources (system threads) for every outstanding network message.</p>
+   <p>Goal: safe usable concurrency. Do not consume resources (system
+   threads) for every outstanding network message.</p>
 
-   <p>Complicator: in some runtimes, pointer assignments are not atomic.
-    <br>Not all languages expose threads. Not all runtimes have support for coroutines. Ugh, GIL.</p>
+   <p>Complicator: in some runtimes, pointer assignments are not
+   atomic.
+   <br>Not all languages expose threads. Not all runtimes have support
+   for coroutines. Ugh, GIL.</p>
 
-   <p>Work queues are widely available on non-threading runtimes, and can be implemented using threads.<br>Coroutines are sufficient to await promises.</p>
+   <p>Work queues are widely available on non-threading runtimes, and
+   can be implemented using threads.<br>Coroutines are sufficient to
+   await promises.</p>
   </section>
 
   <section class="comment">
-   <p>Concurrency lets a programmer compute an answer without controlling the order in which everything happens; I will need an answer to this sub-problem, so I'll start it now, but I don't care whether it happens before or after this next thing I do as long as I get the answer.</p>
+   <p>Concurrency lets a programmer compute an answer without
+   controlling the order in which everything happens; I will need an
+   answer to this sub-problem.  I'll start it now, but I don't care
+   whether it happens before or after this next thing, as long as
+   I have the answer when I need it.</p>
    <p>Widely used languages have a lot of different takes on concurrency.</p>
    <p>Unfortunately, concurrency done wrong can lead to memory corruption.</p>
-   <p>So Temper can't put the safety burden on developers; our target audience isn't just people who know how to avoid unsafe pointer writes.</p>
-   <p>Our solution here is really just, figure out what familiar, safe abstraction can we cobble together on a runtime that has at least one of these widely available affordances.</p>
+   <p>So Temper can't put the safety burden on developers; our target
+   audience isn't just people who know how to avoid unsafe pointer
+   writes.</p>
+   <p>Our solution here is really just, figure out what familiar, safe
+   abstraction can we cobble together on a runtime that has at least
+   one of these widely available affordances.</p>
   </section>
 
   <section class="slide" id="design-choice-concurrency-2">
    <h2>Concurrency</h2>
 
-   <p>Work queues can handle stepping a coroutine that awaits a satisfied promise.<br>The in-process actor model allows mutually exclusive access to shared resources.</p>
+   <p>Work queues can handle stepping a coroutine that awaits a
+   satisfied promise.<br>The in-process actor model allows mutually
+   exclusive access to shared resources.</p>
 
-   <p>Solution: Optionally implement state-machine coroutine conversion during pre-translation.
+   <p>Solution: Optionally implement state-machine coroutine
+   conversion during pre-translation.
     <br>No non-thread-safe top-levels (except in REPL).
-    <br>Statically declared & checked, <i>Imu</i> and <i>PartialImu</i> and <i>Sharable</i> and <i>PartialSharable</i> type modifiers allow safe communication across parallel contexts.</p>
+    <br>Statically declared & checked, <i>Imu</i>
+    and <i>PartialImu</i> and <i>Sharable</i>
+    and <i>PartialSharable</i> type modifiers allow safe communication
+    across parallel contexts.</p>
   </section>
 
   <section class="comment">
-   <p>So we can provide coroutines, and we can provide promises, and they work pretty well together.</p>
-   <p>And we put some restrictions on globally mutable state to provide safety.</p>
+   <p>So we can provide coroutines, and we can provide promises, and
+   they work pretty well together.</p>
+   <p>And we put some restrictions on global, mutable state to
+   ensure safety.</p>
   </section>
 
   <section class="slide" id="design-choice-strings">
@@ -1092,13 +1353,13 @@ String encodeJson(Object o) {
   <section class="slide" id="design-choice-casting-1">
    <h2>Casting</h2>
 
-   <pre><code>// Up casts: to more general
-myCat as Animal
-// Safety known during compilation.
+   <pre><code><span class="c-com">// Up casts: to more general</span>
+<span class="c-id">myCat</span><span class="c-kwd"> as </span><span class="c-id">Animal</span>
+<span class="c-com">// Safety known during compilation.
 
-// Down casts: to more specific
-myAnimal as Cat
-// Safety can only be checked at runtime.</code></pre>
+// Down casts: to more specific</span>
+<span class="c-id">myAnimal</span><span class="c-kwd"> as </span><span class="c-id">Cat</span>
+<span class="c-com">// Safety can only be checked at runtime.</span></code></pre>
 
    <p>Complicator: type introspection, RTTI not consistent across PLs.</p>
   </section>
@@ -1126,7 +1387,7 @@ myAnimal as Cat
   <section class="comment">
    <p>If this complicator looks familiar, it is.  This came up when
    discussing basic generic operations like comparison.  Sometimes
-   multiple Temper type are represented using the same target language
+   multiple Temper types are represented using the same target language
    type.  In many runtimes, it just doesn't make sense to ask "is this
    a boolean or an int?"; the answer is a "yes."</p>
 
@@ -1190,11 +1451,11 @@ class ByteBuffer { // JavaScript/TypeScript
 
    <p>Backends receive method groups, not just methods, and can choose
    to present them as overloads or not.  We have a way to store
-   historical information, information about what a particular
-   published version, so a backend can store information about which
-   could be grouped based on the language's signature collision
-   requirements and the backend can use that to make backwards
-   compatible choices.</p>
+   historical information, information about the choices made when
+   translating a particular published version, so a backend can
+   store information about what it did based on the language's
+   signature collision requirements and later runs of the compiler
+   can use that to make backwards compatible choices.</p>
   </section>
 
   <section class="slide" id="signpost-5">
@@ -1208,6 +1469,8 @@ class ByteBuffer { // JavaScript/TypeScript
    <br>
    <p style="font-size: 110%">&rArr; State of the Project</p>
   </section>
+
+  <!-- timetamp 55 minutes -->
 
   <section class="comment">
    <p>Finally, the state of the Temper project</p>
@@ -1306,9 +1569,16 @@ class ByteBuffer { // JavaScript/TypeScript
   <section class="comment">
    <p>Programming languages go through stages.</p>
    <p>We're in the early adopter stage.</p>
-   <p>We've got the language functional.  It's usable today, but we are reworking some significant parts, like the type system, in significant ways based on what we learned.  Most of those changes should not affect backwards compat, but we're taking the opportunity to make sweeping changes now.</p>
-   <p>And we're still working on things like, how do we store information about compilations so we can do less work on incremental compilations.</p>
-   <p>And we've got plans for a library repository, like pypi but for Temper.</p>
+   <p>We've got the language functional.  It's usable today, but we
+   are reworking some significant parts, like the type system, in
+   significant ways based on what we learned.  Most of those changes
+   should not affect backwards compat, but we're taking the
+   opportunity to make sweeping changes now.</p>
+   <p>And we're still working on things like, how do we store
+   information about compilations so we can do less work on
+   incremental compilations.</p>
+   <p>And we've got plans for a library repository, like pypi but for
+   Temper.</p>
   </section>
 
   <section class="slide" id="state-of-project-4">
@@ -1321,10 +1591,15 @@ class ByteBuffer { // JavaScript/TypeScript
 
   <section class="comment">
    <p>So we can make breaking changes now.</p>
-   <p>If you need something from us to make Temper an awesome language for supporting standards work, let us know.</p>
+   <p>If you need something from us to make Temper an awesome language
+   for supporting standards work, let us know.</p>
    <p>If you'd like to be part of an interest group, I'd love to chat.</p>
-   <p>And if you have an idea about how to spec something related to your standards work, we might be able to pitch in with advice and/or implementation work.</p>
+   <p>And if you have an idea about how to spec something related to
+   your standards work, we might be able to pitch in with advice
+   and/or implementation work.</p>
   </section>
+
+  <!-- timestamp 57 minutes -->
 
   <section class="slide cover clear" id="end-cover">
    <h1>Lightweight Standards</h1>
@@ -1338,6 +1613,25 @@ class ByteBuffer { // JavaScript/TypeScript
 
   <section class="comment">
   </section>
+
+  <!--script>{ // Check for duplicate slide IDs
+   let slides = [...document.body.querySelectorAll('section.slide')];
+   let idCounts = Object.create(null);
+   for (let slide of slides) {
+     let id = slide.id;
+     idCounts[id] = (idCounts[id] || 0) + 1;
+   }
+   let dupes = [];
+   for (let id in idCounts) {
+     let count = idCounts[id];
+     if (count !== 1) {
+       dupes.push(id);
+     }
+   }
+   if (dupes.length) {
+     console.log('dupes: ' + dupes);
+   }
+  }</script-->
 
 <template>
   <section class="slide" id="lists">
