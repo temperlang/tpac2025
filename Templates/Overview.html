@@ -291,26 +291,34 @@
 
   <section class="comment">
    <p>I want deep thinkers to be able to solve problems for everyone.</p>
-   <p>Maybe you really understand a problem like HTML sanitization, taking untrusted HTML and turning it into trustworthy HTML.  If you write a solution in C#, you've solved it on one island.  But that doesn't help Lua users.</p>
-   <p>So Temper's value proposition is a bit different. This is not a language you use instead of other languages, you use it alongside.</p>
+   <p>Maybe you really understand a problem like HTML sanitization,
+   taking untrusted HTML and turning it into trustworthy HTML.  If you
+   write a solution in C#, you've solved it on one island.  But that
+   doesn't help Lua users.</p>
+   <p>So Temper's value proposition is a bit different. This is not a
+   language you use instead of other languages, you use it alongside
+   to support.</p>
   </section>
 
   <section class="slide lightmode" id="guardrails-across-network-gaps">
    <h2>Types Extended</h2>
    <figure>
-    <a href="type-guard-rails.png"><img src="type-guard-rails.png" alt=""></a>
+    <a href="type-guard-rails.png"><img src="type-guard-rails.png" alt="Diagram consisting of several elements: A file marked &quot;Temper&quot; with code &quot;class Person { ... public get age(): Int { ... } }&quot; pointing into a box &quot;> temper build&quot; that fans out to two boxes labeled &quot;Server&quot; and &quot;Client&quot;.  The Server box is a file marked &quot;Java&quot; and contains code &quot;response.send(new Person(name, dateOfBirth))&quot;.  The Client box is a file marked &quot;JS/TS&quot; and contains &quot;let person: Person = Person.fromJSON(resp); f(person.age)&quot;.  Moving from Server to Client is a JSON file with content &quot;{ &quot;name&quot;: &quot;Firsty McLasty&quot;, &quot;dateOfBirth&quot;: &quot;2000-01-01&quot; }&quot;.  There are two speech bubbles with arrows too.  The first says &quot;age not shipped but available via computation&quot; and points to the JSON and points to &quot;f(person.age)&quot; in the Client code.  The second says &quot;Type shared in request + response&quot; and points to &quot;new Person&quot; in the Server code and &quot;let person: Person&quot; in the Client clode."></a>
    </figure>
   </section>
 
   <section class="comment">
-   <p>If nodes can share type definitions, then you can extend a degree of
-   type safety across network boundaries. Here, a class, Person, is shared
-   between Java and JavaScript by translation, but the two also share logic,
-   encoders for values to and from JSON. And by sharing a computed property
-   definition, your wire format becomes concise.</p>
-
-   <p>And going back to static analysis.  And now static analyzers have
-    common points of reference.</p>
+   <p>But the island analogy works not just for language communities,
+   it also applies to systems.  Here we've got a Java backend talking
+   to a JavaScript web client.  Those are also islands.</p>
+   <p>If we can share type definitions within a system, then you can
+   extend a degree of type safety across network boundaries. Here, a
+   class, Person, is shared between Java and JavaScript by
+   translation, but the two also share logic, encoders for values to
+   and from JSON. And by sharing a computed property definition, your
+   wire format becomes concise.</p>
+   <p>And going back to static analysis, now static analyzers have
+   common points of reference.</p>
   </section>
 
   <section class="slide" id="signpost-2">
@@ -334,18 +342,29 @@
    <h3>Currency (ISO 4217)</h3>
    <p>A literate specification with types, logic, and tests.</p>
    <h3>CSS-color-4</h3>
-   <p>Can delivering libraries with specs help devs and the dev-tools ecosystem?</p>
+   <p>Can delivering libraries with specs help devs and the dev-tools
+   ecosystem?</p>
    <h3>JSON {,un}parsing</h3>
    <p>Avoid interop problems via a partial reference implementation.</p>
   </section>
 
   <section class="comment">
-   <p>I've got a few demos prepared. Depending on what interests people, I can skip around.</p>
-   <p>The first is a simple one. A literate standard that mixes prose, reference implemenation code, and tests. I want to show what it's like to use the language, and what the reference implementation looks like.</p>
+   <p>I've got a few demos prepared. Depending on what interests
+   people, I can skip around.</p>
+   <p>The first is a simple one. A literate standard that mixes prose,
+   reference implemenation code, and tests. I want to show what it's
+   like to use the language, and what the reference implementation
+   looks like.</p>
 
-   <p>The second, CSS colors. Browsers care about CSS colors, but so do graphic designer tools. I was hoping to frame discussion about how a standard could encourage a rich tool ecosystem by by making colorspace logic ubiquitous.</p>
+   <p>The second, CSS colors. Browsers care about CSS colors, but so
+   do graphic designer tools. I was hoping to frame discussion about
+   how a standard could encourage a rich tool ecosystem by by making
+   colorspace logic ubiquitous.</p>
 
-   <p>Third, the JSON standard. There are a lot of parsing corner cases that cause interop problems. JSON Could those have been avoided if just part of the specification were ubiquitously available?</p>
+   <p>Third, the JSON standard. There are a lot of parsing corner
+   cases that cause interop problems. JSON Could those have been
+   avoided if just part of the specification were ubiquitously
+   available?</p>
   </section>
 
   <section class="slide side" id="iso-4217">
@@ -360,17 +379,24 @@
 
    <p>Prose intermixed with type definitions, logic, and tests</p>
 
-   <p>Using the playground to see libraries from target language users' points of view.</p>
+   <p>Using the playground to see libraries from target language
+   users' points of view.</p>
   </section>
 
   <section class="comment">
    <p>Demo script:</p>
-   <p>Show price.temper.md in VSCode.  Note the narrative structure: prose explains what and why; library code captures how; and test code captures examples.</p>
-   <p>Open up <code>temper repl -b py</code> and show creating a value from Python and encoding it to JSON.</p>
-   <p>Switch to <code>temper repl -b java</code> and show unpacking a value and how it's just a regular Java class.</p>
+   <p>Show price.temper.md in VSCode.  Note the narrative structure:
+   prose explains what and why; library code captures how; and test
+   code captures examples.</p>
+   <p>Open up <code>temper repl -b py</code> and show creating a value
+   from Python and encoding it to JSON.</p>
+   <p>Switch to <code>temper repl -b java</code> and show unpacking a
+   value and how it's just a regular Java class.</p>
+   <p>Show the add-two-prices coroutine, and that it works in Java
+   despite Java not having native support for coroutines.</p>
   </section>
 
-    <section class="slide side" id="iso-4217-takeaways">
+  <section class="slide side" id="iso-4217-takeaways">
    <h2>Currency type as a Library</h2>
 
    <figure class="side">
@@ -383,15 +409,24 @@
    <p>Devs end up with a library.</p>
 
    <p>Every PL community gets supporting libraries and can exchange
-   values with others; islands bridged.</p>
+   values with others. Islands bridged!</p>
   </section>
 
   <section class="comment">
    <p>Here's what I hope you noticed:</p>
-   <p>In a standards document, we explained things in prose, so it's accessible to subject matter experts.  Embedded code captures how computation is done, and tests.</p>
-   <p>One thing to note: tests are pretty formulaic, so subject matter experts should be able to capture some requirements, as they figure things out, as tests, possibly with AI assistance, and hand them off to implementors.</p>
-   <p>At the end of the standards drafting process, in normal standards process, that's when the hard work for implementors starts.  But in this case, you've got a well-tested reference implementation ready.</p>
-   <p>With Temper, you deliver high quality support to devs and bridge those language community islands.</p>
+   <p>In a standards document, we explained things in prose, so it's
+   accessible to subject matter experts.  Embedded code captures how
+   computation is done, and tests.</p>
+   <p>One thing to note: tests are pretty formulaic, so subject matter
+   experts should be able to capture some requirements, as they figure
+   things out, as tests, possibly with AI assistance, and hand them
+   off to implementors.</p>
+   <p>At the end of the standards drafting process, in normal
+   standards process, that's when the hard work for implementors
+   starts.  But in this case, you've got a well-tested reference
+   implementation ready.</p>
+   <p>With Temper, you deliver high quality support to devs and bridge
+   those language community islands.</p>
   </section>
 
   <section class="slide side" id="demo-prismora">
@@ -411,10 +446,27 @@
    </ul>
 
    <p>Library-driven interop good for the tools ecosystem.</p>
+
+   <p>Easier to evolve a spec when the tool ecosystem quickly catches up.</p>
   </section>
 
   <section class="comment">
-   <p>TODO: demo script, takeaways</p>
+   <p>We wrote a library for colorspace conversions, Prismora.</p>
+   <p><i>Show prismora</i></p>
+   <p>And the nice thing about libraries is that you can provide nice
+   conveniences.  What is the named color closest to a color, and how
+   close is it, in the OKLab space?  This function answers that.</p>
+   <p>The target audience for the CSS colors module is browser
+   implementors, but there's an entire ecosystem outside the browser.
+   Graphic designers need tools to author and refactor CSS, design
+   systems people, CSS-plus languages in the Markdown publishing
+   space, and tools like CSS minifiers.</p>
+   <p>Many of those are not written in a web language entirely, so
+   might implement their own again partial, divergent
+   implementations.</p>
+   <p>Might it be easier for the CSS colors maintainers to evolve the
+   spec if the tool ecosystem could track parts of it by just doing a
+   library update?</p>
   </section>
 
   <section class="slide side" id="json-minefield">
@@ -427,7 +479,8 @@
 
    <p>Lots of interop problems around parsing</p>
 
-   <p>What resulted: an undocumented de facto standard for a "safe" subset<sup>&dagger;</sup> of JSON syntax.</p>
+   <p>What resulted: an undocumented de facto standard for a "safe"
+   subset<sup>&dagger;</sup> of JSON syntax.</p>
 
    <p>With Temper, this could have been avoided.</p>
 
@@ -435,63 +488,89 @@
   </section>
 
   <section class="comment">
-   <p>Parsing JSON is a minefield.</p>
-   <p>I did a bunch of work on JSON security starting around 2008, so this hits me hard.</p>
-   <p>That image is a test result matrix. Each row has a snippet of JSON, some invalid.</p>
+   <p>Parsing JSON is a minefield.  It really is.</p>
+   <p>I did a bunch of work on JSON security starting around 2008, so
+   this hits me hard.</p>
+   <p>That image is a test result matrix. Each row has a snippet of
+   JSON, some invalid.</p>
    <p>Each column is a JSON parsing library.</p>
-   <p>The whole point of a format like JSON is, two programs, often in different languages,
-   agree on the format, and then they can communicate.</p>
-   <p>But there's a lot of disagreement, a lot of parsing corner cases.  There're reasons for that.</p>
+   <p>The whole point of a format like JSON is, two programs, often in
+   different languages, agree on the format, and then they can
+   communicate.</p>
+   <p>But there's a lot of disagreement, a lot of parsing corner
+   cases.  There're reasons for that.</p>
    <ul>
-    <li>Writing efficient parsers <em>is</em> just hard.</li>
-    <li>UTF-8 and UTF-16 internal string representations lead to different corner cases</li>
+    <li>Writing efficient parsers <em>is</em> hard.</li>
+    <li>UTF-8 and UTF-16 internal string representations lead to
+    different corner cases</li>
     <li>Different Postel's law stances</li>
    </ul>
-   <p>This all could have been avoided if the <i>json.org</i>, RFC 8259, and later ECMA-404 had the tools to provide a partial implementation of the JSON parsing algorithm.</p>
+   <p>This all could have been avoided if the <i>json.org</i>, RFC
+   8259, and later ECMA-404 had the tools to provide a partial
+   implementation of the JSON parsing algorithm.</p>
   </section>
 
   <section class="slide" id="demo-json-interop">
    <h2>Demo: partial implementation of JSON for interop</h2>
 
-   <p>Problem: JSON agnostic to number/string representation, value semantics.</p>
+   <p>Problem: JSON agnostic to number/string representation, value
+   semantics.</p>
 
-   <p><code>[1,2]</code> could specify a list of 32b ints, or big decimals, or a 2-D point, &hellip;</p>
+   <p><code>[1,2]</code> could specify a list of 32b ints, or big
+   decimals, or a 2-D point, &hellip;</p>
 
-   <p><big>Can we implement enough JSON once to solve interop but remain value-semantics agnostic?</big></p>
+   <p><big>Can we implement enough JSON once to solve interop but
+   remain value-semantics agnostic?</big></p>
   </section>
 
   <section class="comment">
-   <p>JSON is an interop format. It has numbers and strings, but it doesn't say what they mean, nor should it.</p>
-   <p>And the relationship between JSON sub-expressions and values is incredibly context dependent.</p>
-   <p>If Temper were available when JSON was first drafted, could we have dodged both the incredible number of subtle parsing interop issues without mandating value-semantics?</p>
+   <p>JSON is an interop format. It has numbers and strings, but it
+   doesn't say what they mean, nor should it.</p>
+   <p>And the relationship between JSON sub-expressions and values is
+   incredibly context dependent.</p>
+   <p>If Temper were available when JSON was first drafted, could we
+   have dodged both the incredible number of subtle parsing interop
+   issues without mandating value-semantics?</p>
   </section>
 
   <section class="slide" id="event-driven-parsing"><h2 style="font-size: 100%">Event driven parsing</h2><img src="parsing-with-event-streams.png" alt="A sequence of three labeled diagrams. First label 'Source Text' above code '[1, 2, 3]'. Second label 'Abstract Syntax Tree' above one box labeled 'Array' that fans out to three boxes below labeled 'Number(1)', 'Number(2)', 'Number(3)'. Third and last diagram, 'Flattened Tree / Event Stream', above 'startArray, number(1), number(2), number(3), endArray'.  From the Array box in the middle diagram, two dashed arrows fan out to the 'startArray' and to the 'endArray' events.  One dashed arrow goes from the 'Number(1)' box in the second diagram to the corresponding 'number(1)' text in the third.  There are two labels to the right of the second diagram: 'Inner Nodes' lining up with the 'Array' box and 'Leaf Nodes' lining up with the 'Number(...)' boxes." width=431 height=257></section>
 
   <section class="comment">
-   <p>In security engineering, I was known as someone who does strange things with parsers.</p>
+   <p>Among security engineers, I was known as a person who does strange
+   things with parsers.</p>
    <p>Event-driven parsing is a useful trick.</p>
-   <p>Event-driven parsing allows representing both parsing and unparsing operations as a stream of events.  Conceptually, it involves flattening an abstract syntax tree to a list: each inner node becomes a tagged start and end node, and content lives at leaf ndoes.  But because each event is just a method call, it's flexible and performant.</p>
+   <p>It allows representing both parsing and unparsing operations as
+   a stream of events.  Conceptually, it involves flattening an
+   abstract syntax tree to a list: each inner node becomes a tagged
+   start and end node, and content lives at leaf nodes.  But because
+   each event is just a method call, it's flexible and performant.</p>
   </section>
 
   <section class="slide" id="json-interop-pipelines">
-   <p>Solution: value-model-agnostic event-driven parsing and unparsing à la SAX.</p>
+   <p>Solution: value-model-agnostic event-driven parsing and
+   unparsing à la SAX.</p>
 
    <img src="json-parsing-pipeline.png" width=281 height=240 alt="a sequence diagram consisting of a vertical stack of four nodes each pointing to the next.  From top to bottom, in order, 'parse(&quot;[[123]]&quot;)', then header 'Event Stream' above 'startArr, startArr, number(123), endArr, endArr', then ValueBuildingEventReceiver, then 'listOf(listOf(123))'"><img src="json-unparsing-pipeline.png" width=281 height=240 alt="a sequence diagram consisting of a vertical stack of four nodes each pointing to the next.  From top to bottom, in order, 'serialize(listOf(listOf(123)))', then header 'Event Stream' above 'startArr, startArr, number(123), endArr, endArr', then JsonTextProducingEventReceiver, then '&quot;[[123]]&quot;'">
   </section>
 
   <section class="comment">
-   <p>Event-driven parsing allows a very clean separation between structure and semantics, and as you can see here, you can have a value-agnostic parser produce the stream, and an actual unparser can consume the event stream.</p>
+   <p>Event-driven parsing allows a very clean separation between
+   structure and semantics, and as you can see here, you can have a
+   value-agnostic parser produce the stream, and an actual unparser
+   can consume the event stream.</p>
 
    <p>How does that simplify parsing and unparsing?</p>
 
-   <p>As can be seen on the left, we can have a generic JSON parser, one
-   which cares nothing about the values it produces, convert JSON text
-   into an event stream.</p>
+   <p>As can be seen on the left, we can have a generic JSON parser,
+   one which cares nothing about the values it produces, convert JSON
+   text into an event stream.</p>
 
-   <p>The knowledge about how to turn those events into a value is embedded in an event consumer.</p>
+   <p>The knowledge about how to turn those events into a value is
+   embedded in an event consumer.</p>
 
-   <p>The reverse is also possible. An encoder for a type can serialize a value to events. A generic JSON stringifier consumes those events, adding tokens to an output buffer.</p>
+   <p>The reverse is also possible. An encoder for a type can
+   serialize a value to events. A generic JSON stringifier consumes
+   those events, adding tokens to an output buffer.</p>
 
    <p>Let's look at Temper's std/json library which does this.</p>
   </section>
@@ -509,12 +588,16 @@
   </section>
 
   <section class="comment">
-   <p>The takeaway from this JSON example: you don't need a full implementation to provide a lot of value.</p>
+   <p>The takeaway from this JSON example: you don't need a full
+   implementation to provide a lot of value.</p>
 
-   <p>There may be good reasons not to do a full reference implementation.
-   But often there are strategies to be opinionated where it helps and agnostic where it doesn't.</p>
+   <p>There may be good reasons not to do a full reference
+   implementation.  But often there are strategies to be opinionated
+   where it helps and agnostic where it doesn't.</p>
 
-   <p>In this case, the community would have benefitted from consistency in string processing; once we identified that need, the design flowed naturally from that.</p>
+   <p>In this case, the community would have benefitted from
+   consistency in string processing; once we identified that need, the
+   design flowed naturally from that.</p>
   </section>
 
   <section class="slide" id="greasy-skids">
@@ -532,14 +615,15 @@
   <section class="comment">
    <p>I showed you three demos.</p>
    <p>I want to spur ideas on how the Temper language can help standards
-    folk in their work, and the developers and software downstream.</p>
+   folk in their work, and the developers and software downstream.</p>
    <p>The thread tying these demos together, each looks at supporting
-    a different group of contributors.</p>
-   <p>Everyday developers, browser&amp;tools developers, or framework authors.</p>
-   <p>But I also think there's an opportunity for you to help each other.
-    If some other W3C group has questions about what you're doing and
-    how it affects them, giving them a reference implementation that works
-    in the languages they use might help.</p>
+   a different group of contributors.</p>
+   <p>Everyday developers, browser&amp;tools developers, or framework
+   authors.</p>
+   <p>But I also think there's an opportunity for you to help each
+   other.  If some other W3C group has questions about what you're
+   doing and how it affects them, giving them a reference
+   implementation that works in the languages they use might help.</p>
    <p>You all would probably understand better than me, where that'd be.</p>
   </section>
 
@@ -556,7 +640,9 @@
   </section>
 
   <section class="comment">
-   <p>I'm here representing the Temper contributors, and would love to know what we can do for you, and I can make committments of aid.</p>
+   <p>I'm here representing the Temper contributors, and would love to
+   know what we can do for you, and I can make committments of
+   aid.</p>
    <p>So opening this up, how this might help you in your work?</p>
   </section>
 
@@ -574,15 +660,16 @@
 
   <section class="comment">
    <p>Next up, what makes Temper different from other programming languages?</p>
-   <p>Why do you even need to design to translate well?  Why not just translate an existing language?</p>
+   <p>Why do you even need to design to translate well?  Why not just
+   translate an existing language?</p>
   </section>
 
   <section class="slide" id="design-for-translation">
    <h2>Multi-backend programming languages</h2>
 
    <p>
-    Many multi-backend languages run in their runtime, and JavaScript runtimes:
-    Scala, OCaml, Dart, Kotlin.
+    Many multi-backend languages run in their runtime, and JavaScript
+    runtimes: Scala, OCaml, Dart, Kotlin.
    </p>
 
    <p>But not Python</p>
@@ -858,10 +945,21 @@ String encodeJson(Object o) {
   </section>
 
   <section class="comment">
-   <p>Notably, Perl, PHP, and JavaScript do this.  Perl and PHP have a scalar type that covers numbers, strings, and booleans.  JavaScript has a number type that is used for all floating point computation, and most integer computations.</p>
-   <p>That means we can't have one comparison function that looks at the type of its arguments.  Not only does the performance suck, but there just isn't enough information at runtime.</p>
-   <p>That's our solution.  We solved this problem because we had to by repurposing a number of well-understood PL techniques but existing languages just won't because they languages grew up alongside a runtime.  That's a lot of jargon, but I'm happy to explain offline.</p>
-   <p>But because we solved this, that uncontroversial, to developers', behaviour of comparisons and stringification can just work.</p>
+   <p>Notably, Perl, PHP, and JavaScript do this.  Perl and PHP have a
+   scalar type that covers numbers, strings, and booleans.  JavaScript
+   has a number type that is used for all floating point computation,
+   and most integer computations.</p>
+   <p>That means we can't have one comparison function that looks at
+   the type of its arguments.  Not only does the performance suck, but
+   there just isn't enough information at runtime.</p>
+   <p>That's our solution.  We solved this problem because we had to
+   by repurposing a number of well-understood PL techniques but
+   existing languages just won't because they languages grew up
+   alongside a runtime.  That's a lot of jargon, but I'm happy to
+   explain offline.</p>
+   <p>But because we solved this, that uncontroversial, to
+   developers', behaviour of comparisons and stringification can just
+   work.</p>
   </section>
 
   <section class="slide" id="design-choice-memory-1">
