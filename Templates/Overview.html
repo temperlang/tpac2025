@@ -587,7 +587,7 @@ $4.getClass()
    <h2>JSON</h2>
 
    <figure class="side">
-    <img src="json_parsing_pruned_results.png" alt="Screenshot of VSCode showing a file browser inside 'prismora' including files with suffix .temper.md including color, generic, helpers, matrix, oklab, rgb.  The source tab looks like markdown with header Oklab Color Space and subheader Oklab Conversion and then includes a 'References' list of URLs including bottoson.github, oklch.com and w3.org/TR/css-color-4.  Following it is a nested code block defining srgbLinearToOkLab function that takes an rgb: Matrix and which returns a matrix.  Below that are two constant definitions for 3x3 matrices: srgbLinearToOklab0 and ...1 and a helper function definition `let oklabToSrgbLinear.">
+    <img src="json_parsing_pruned_results.png" alt="table from https://seriot.ch/software/parsing_json.html with colored cells.  The row labels along the right are snippets of JSON and column labels along the top are names of parsing libraries, too small to read.  The legend explains that green results, the majority are expected results, and there is a large blue chunk split between result undefined, parsing succeeded and result undefined parsing failed.  There are plenty of other results sprinkled haphazardly throughout between parser crashed (red), parser should have succeeded but failed or succeded (brown and yellow) and a few grey (timeout)">
     <caption>"Parsing JSON is a Minefield 💣" <small><address>Nicolas Seriot</address></small></caption>
    </figure>
 
@@ -1381,7 +1381,7 @@ String encodeJson(Object o) {
 
    <p>Complicator: Some languages (e.g. Perl, PHP, JavaScript) do not distinguish between all of ints, floats, booleans, strings. 0 can mean different things.</p>
 
-   <p>Solution: Restrictions on down-casting. Sealed (product) types always castable.</p>
+   <p>Solution: Restrictions on down-casting. Sealed (sum) types always castable.</p>
   </section>
 
   <section class="comment">
@@ -1393,7 +1393,7 @@ String encodeJson(Object o) {
 
    <p>So we have a lot of restrictions on casting.</p>
 
-   <p>But we do relax that. A sealed type, a kind of product type
+   <p>But we do relax that. A sealed type, a kind of sum type
    where the compiler has access to all direct subtypes, allow the
    compiler to bake in extra code to enable safe checks. So casting
     from a sealed type to a direct subtype is checkable.</p>
